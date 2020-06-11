@@ -1,0 +1,184 @@
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Custard.Objects;
+using NUnitTestCustard.ModelsTest;
+using System.Threading.Tasks;
+using Microsoft.VisualBasic;
+using System.Collections.ObjectModel;
+
+namespace NUnitTestCustard
+{
+    class ServiceTest
+    {
+        private static Service _service;
+
+        [SetUp]
+        public void Setup()
+        {
+            _service = new Service("localhost", 80);
+        }
+        // Construtor
+        //
+        // Without SSL certificate
+        [Test]
+        public void ConstructorNonSSl()
+        {
+            // Arrange
+            Service constructorNonSSl;
+
+            // Act
+            constructorNonSSl = new Service("localhost", 2520);
+
+            // Assert
+            Assert.AreEqual("http://localhost:2520/", constructorNonSSl.BaseUrl);
+        }
+        //
+        // With a SSL certificate
+        [Test]
+        public void ConstructorSSl()
+        {
+            // Arrange
+            Service constructorNonSSl;
+
+            // Act
+            constructorNonSSl = new Service("localhost", 2520, true);
+
+            // Assert
+            Assert.AreEqual("https://localhost:2520/", constructorNonSSl.BaseUrl);
+        }
+
+        //
+        // Without any port field
+        [Test]
+        public void ConstructorNoPort()
+        {
+            // Arrange
+            Service constructorNonSSl;
+
+            // Act
+            constructorNonSSl = new Service("localhost");
+
+            // Assert
+            Assert.AreEqual("http://localhost/", constructorNonSSl.BaseUrl);
+        }
+
+        // Post Method
+        //
+        // With a body no params no token
+        [Test]
+        public async Task PostMethodWithBody()
+        {
+            // Arrange
+            User Expectation = new User
+            {
+                Username = "BriceFriha",
+                FirstName = "Brice",
+                LastName = "Friha",
+            };
+
+            string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
+
+            // Act
+            User actualResult = await _service.ExecutePost<User>( "users", "authenticate", null,  body);
+
+            // Assert
+            Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
+        }
+        // Post Method
+        // With a body a token but no params 
+        [Test]
+        public async Task GetMethodWithToken()
+        {
+            // Arrange
+            Collection<Todolist> Expectation = new Collection<Todolist>
+            {
+                new Todolist
+                {
+                    Title = "Shopping list",
+                    User = "5ee0e25556294c2c70ee128b"
+                },
+                new Todolist
+                {
+                    Title = "Shopping list",
+                    User = "5ee0e25556294c2c70ee128b"
+                },
+                new Todolist
+                {
+                    Title = "Shopping list",
+                    User = "5ee0e25556294c2c70ee128b"
+                },
+                new Todolist
+                {
+                    Title = "Shopping list",
+                    User = "5ee0e25556294c2c70ee128b"
+                },
+                new Todolist
+                {
+                    Title = "Shopping list",
+                    User = "5ee0e25556294c2c70ee128b"
+                },
+
+            };
+            IDictionary<string, string> headers = new Dictionary<string, string>() ;
+
+            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+
+
+            // Act
+            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>( "todolists", null, headers);
+
+            // Assert
+            Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
+        }
+        // Put Method
+        [Test]
+        public async Task PutMethodWithToken()
+        {
+            // Arrange
+            Todolist Expectation = new Todolist
+            {
+                    Title = "Unit test",
+                    User = "5ee24ee3796d9519fcc1b25d"
+            };
+
+            string body = "{ \"title\": \"Workout\" }";
+            IDictionary<string, string> headers = new Dictionary<string, string>();
+
+            string[] parameters = { "5ee24eff796d9519fcc1b25e" };
+
+            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+
+
+            // Act
+            Todolist actualResult = await _service.ExecutePut<Todolist>("todolists", "rename", headers, body, parameters);
+
+            // Assert
+            Assert.AreEqual(Expectation.User, actualResult.User);
+        }
+
+        // Delete Method
+        [Test]
+        public async Task DeleteMethodWithToken()
+        {
+            // Arrange
+            DeleteCode Expectation = new DeleteCode
+            {
+                Status = "OK",
+            };
+            IDictionary<string, string> headers = new Dictionary<string, string>();
+
+            string[] parameters = { "5ee255cda88824078cfe6beb" };
+
+            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+
+
+            // Act
+            DeleteCode actualResult = await _service.ExecuteDelete<DeleteCode>("todolists", null, headers, null, parameters); ;
+
+            // Assert
+            Assert.AreEqual(Expectation.Status, actualResult.Status);
+        }
+    }
+}
