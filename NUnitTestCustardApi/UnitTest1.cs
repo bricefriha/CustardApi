@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace NUnitTestCustard
+namespace NUnitTestCustardApi
 {
     public class Tests
     {
