@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Custard.Objects;
-using NUnitTestCustard.ModelsTest;
+using CustardApi.Objects;
+using NUnitTestCustardApi.ModelsTest;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 
-namespace NUnitTestCustard
+namespace NUnitTestCustardApi
 {
     class ServiceTest
     {
