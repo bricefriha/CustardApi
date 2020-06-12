@@ -1,4 +1,4 @@
-# What's CustardApi?
+# What's Custard?
 Custard is a .NET core library allowing to make API method calls easier.
 
 # Documentation
