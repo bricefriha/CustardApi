@@ -12,10 +12,59 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 - ### Call a POST method
 
-```C#
-yourService.ExecutePost<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
-```
+  **Parameters**:
 
+  | Name      | Type     | Required     |
+  | :------------- | :----------: | -----------: |
+  |  *controller* | string   | ✔    |
+  |  *action* | string   |  ❌   |
+  |  *headers* | IDictionary<string, string>   |  ❌  |
+  |  *jsonBody* | string   |   ❌  |
+  |  *parameters* | string[]   |   ❌  |
+
+
+  **Usage**:
+
+  ```C#
+  yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
+  ```
+- ### Call a PUT method
+
+  **Parameters**:
+
+  | Name      | Type     | Required     |
+  | :------------- | :----------: | -----------: |
+  |  *controller* | string   | ✔    |
+  |  *action* | string   |  ❌   |
+  |  *headers* | IDictionary<string, string>   |  ❌  |
+  |  *jsonBody* | string   |   ❌  |
+  |  *parameters* | string[]   |   ❌  |
+
+
+  **Usage**:
+
+  ```C#
+  yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
+  ```
+
+- ### Call a GET method
+
+  **Parameters**:
+
+  | Name      | Type     | Required     |
+  | :------------- | :----------: | -----------: |
+  |  *controller* | string   | ✔    |
+  |  *action* | string   |  ❌   |
+  |  *headers* | IDictionary<string, string>   |  ❌  |
+  |  *jsonBody* | string   |   ❌  |
+  |  *parameters* | string[]   |   ❌  |
+
+
+  **Usage**:
+
+  ```C#
+  yourService.ExecuteGet<T> (controller, action, headers, jsonBody, parameters);
+  ```
 
 
 
