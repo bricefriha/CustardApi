@@ -1,3 +1,8 @@
+<p align="center" class="container" >
+  <img width="200px" src="https://user-images.githubusercontent.com/37577669/85275198-47b3ca00-b480-11ea-8273-d990295416a7.png" />
+  
+</p>
+
 # What's Custard? 
 Custard is a .NET core library allowing to make API method calls easily. 😁
 
