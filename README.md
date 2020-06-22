@@ -1,5 +1,7 @@
 # What's Custard? 
-Custard is a .NET core library allowing to make API method calls easier. 😁
+Custard is a .NET core library allowing to make API method calls easily. 😁
+
+[![NuGet](https://img.shields.io/nuget/v/Custard.svg?style=flat)](https://www.nuget.org/packages/Custard/)
 
 # Documentation 📄
 
