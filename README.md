@@ -1,7 +1,7 @@
-# What's Custard?
-Custard is a .NET core library allowing to make API method calls easier.
+# What's Custard? 
+Custard is a .NET core library allowing to make API method calls easier. 😁
 
-# Documentation
+# Documentation 📄
 
 ## Custard.Service
 - ### Instanciate a service object:
