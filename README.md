@@ -68,4 +68,4 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 
 
-**I didn't finish the documentation, that why it's so uggly. Sorry about that 😁**
+**I didn't finish the documentation, that why it's so ugly. Sorry about that 😁**
