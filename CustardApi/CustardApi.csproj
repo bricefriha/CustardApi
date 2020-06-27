@@ -13,6 +13,7 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/bricefriha/CustardApi</RepositoryUrl>
     <PackageIcon>Custard.png</PackageIcon>
+    <Description>Custard is a .NET core library allowing to make API method calls easily. 😁</Description>
   </PropertyGroup>
 
   <ItemGroup>
