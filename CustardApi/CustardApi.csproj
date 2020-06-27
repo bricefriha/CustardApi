@@ -11,7 +11,7 @@
     <FileVersion>0.0.1.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl>https://www.nuget.org/packages/Custard/</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bricefriha/CustardApi</RepositoryUrl>
     <PackageIcon>Custard.png</PackageIcon>
   </PropertyGroup>
 
