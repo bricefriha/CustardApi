@@ -99,6 +99,61 @@ namespace CustardApi.Objects
             return await Process<T>(controller, jsonBody, action, headers, parameters, HttpMethod.Delete);
         }
         /// <summary>
+        /// Execute a post method without header and return a string
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> ExecutePost (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process(controller, jsonBody, action, headers, parameters, HttpMethod.Post);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> ExecuteGet (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process (controller, jsonBody, action, headers, parameters, HttpMethod.Get);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> ExecutePut (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        {
+
+
+            return await Process (controller, jsonBody, action, headers, parameters, HttpMethod.Put);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> ExecuteDelete (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            // Get the reponse
+            return await Process (controller, jsonBody, action, headers, parameters, HttpMethod.Delete);
+        }
+        /// <summary>
         /// Get get a response
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
