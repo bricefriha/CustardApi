@@ -167,15 +167,20 @@ namespace NUnitTestCustardApi
             {
                 Status = "OK",
             };
+            ///
+            /// Prepare the header
             IDictionary<string, string> headers = new Dictionary<string, string>();
-
-            string[] parameters = { "5ee255cda88824078cfe6beb" };
-
             headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
-
+            ///
+            /// Create the item that we gonna delete later on
+            string body = "{ \"title\": \"Workout\" }";
+            Todolist itemToDelete = await _service.ExecutePost<Todolist>("todolists", "create", headers, body);
+            /// 
+            /// Put the id as parameters of the delete method
+            string[] parameters = { itemToDelete.Id };
 
             // Act
-            DeleteCode actualResult = await _service.ExecuteDelete<DeleteCode>("todolists", null, headers, null, parameters); ;
+            DeleteCode actualResult = await _service.ExecuteDelete<DeleteCode>("todolists", null, headers, null, parameters); 
 
             // Assert
             Assert.AreEqual(Expectation.Status, actualResult.Status);
