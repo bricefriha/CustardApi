@@ -78,7 +78,7 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 
   **Usage**:
-- To return a string:
+  - To return a string:
   ```C#
   yourService.ExecuteGet (controller, action, headers, jsonBody, parameters);
   ```
