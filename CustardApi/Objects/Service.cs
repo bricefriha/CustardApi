@@ -44,7 +44,7 @@ namespace CustardApi.Objects
             _baseUrl = (_sslCertificate ? "https" : "http") + "://"+ _host + (_port == 80 ? "/" : ":" + _port + "/"); 
         }
         /// <summary>
-        /// Execute a post method without header
+        /// Execute a post method without header and return a model
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
@@ -56,9 +56,9 @@ namespace CustardApi.Objects
 
             return await Process<T>(controller, jsonBody, action, headers, parameters, HttpMethod.Post);
         }
-    
+
         /// <summary>
-        /// Execute a get method 
+        /// Execute a get method and return a model
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
@@ -67,12 +67,11 @@ namespace CustardApi.Objects
         /// <returns></returns>
         public async Task<T> ExecuteGet<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
-            var result = default(T);
 
             return await Process<T>(controller, jsonBody, action, headers, parameters, HttpMethod.Get);
         }
         /// <summary>
-        /// Execute a put method 
+        /// Execute a put method and return a model
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
@@ -86,7 +85,7 @@ namespace CustardApi.Objects
             return await Process<T>(controller, jsonBody, action, headers, parameters, HttpMethod.Put);
         }
         /// <summary>
-        /// Execute a delete method 
+        /// Execute a delete method and return a model
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
@@ -107,9 +106,8 @@ namespace CustardApi.Objects
         /// <param name="jsonBody"></param>
         /// <param name="action"></param>
         /// <param name="headers"></param>
-        /// <param name="result"></param>
         /// <param name="httpMethod"></param>
-        /// <returns></returns>
+        /// <returns>response of the method in the form of a model</returns>
         private async Task<T> Process<T>(string controller, string jsonBody, string action, IDictionary<string, string> headers, string[] parameters, HttpMethod httpMethod)
         {
             var result = default(T);
@@ -159,6 +157,74 @@ namespace CustardApi.Objects
                                 {
                                     result = JsonConvert.DeserializeObject<T>(content);
                                 }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("[Issue Handler]: " + ex.Message);
+                }
+
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Get get a string response
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="jsonBody"></param>
+        /// <param name="action"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpMethod"></param>
+        /// <returns>response of the method in the form of a string</returns>
+        private async Task<string> Process (string controller, string jsonBody, string action, IDictionary<string, string> headers, string[] parameters, HttpMethod httpMethod)
+        {
+            string result = string.Empty;
+
+            // Build the url
+            string methodUrl = _baseUrl + controller +  (string.IsNullOrEmpty(action) ? "" : "/" + action);
+
+            // If there are some parameters
+            if (parameters != null)
+            {
+                // For each parameters
+                foreach (string parameter in parameters)
+                {
+                    // Add the parameter to the url
+                    methodUrl += "/" + parameter;
+
+                }
+            }
+
+            // Build the request
+            using (var request = new HttpRequestMessage(httpMethod, methodUrl))
+            {
+                // Content of the request
+                if (jsonBody != null)
+                {
+                    request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                }
+                // Headers of the request
+                if (headers != null)
+                {
+                    foreach (var h in headers)
+                    {
+                        request.Headers.Add(h.Key, h.Value);
+                    }
+                }
+                // Handler
+                try
+                {
+                    using (var handler = new HttpClientHandler())
+                    {
+                        using (var client = new HttpClient(handler))
+                        {
+                            using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead))
+                            {
+                                // Set the result from the response
+                                result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
                             }
                         }
                     }
