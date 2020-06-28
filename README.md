@@ -33,10 +33,14 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 
   **Usage**:
-
-  ```C#
-  yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
-  ```
+  - To return a string:
+    ```C#
+    yourService.ExecutePost (controller, action, headers, jsonBody, parameters);
+    ```
+  - To return a model (T is the model):
+    ```C#
+    yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
+    ```
 - ### Call a PUT method
 
   **Parameters**:
@@ -51,10 +55,14 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 
   **Usage**:
-
-  ```C#
-  yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
-  ```
+  - To return a string:
+    ```C#
+    yourService.ExecutePut (controller, action, headers, jsonBody, parameters);
+    ```
+  - To return a model (T is the model):
+    ```C#
+    yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
+    ```
 
 - ### Call a GET method
 
@@ -70,7 +78,11 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 
 
   **Usage**:
-
+- To return a string:
+  ```C#
+  yourService.ExecuteGet (controller, action, headers, jsonBody, parameters);
+  ```
+  - To return a model (T is the model):
   ```C#
   yourService.ExecuteGet<T> (controller, action, headers, jsonBody, parameters);
   ```
