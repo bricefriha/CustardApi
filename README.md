@@ -11,7 +11,15 @@ Custard is a .NET core library allowing to make API method calls easily. 😁
 
 
 # Documentation 📄
-
+## Installation
+- Package manager
+  ```Bash
+  Install-Package Custard -Version 0.1.3
+  ```
+- .NET CLI
+  ```Bash
+  dotnet add package Custard --version 0.1.3
+  ```
 ## Custard.Service
 - ### Instanciate a service object:
 
