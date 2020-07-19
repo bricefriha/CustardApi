@@ -17,7 +17,7 @@ namespace NUnitTestCustardApi
         [SetUp]
         public void Setup()
         {
-            _service = new Service("localhost", 80);
+            _service = new Service("localhost");
         }
         // Construtor
         //
@@ -62,6 +62,20 @@ namespace NUnitTestCustardApi
 
             // Assert
             Assert.AreEqual("http://localhost/", constructorNonSSl.BaseUrl);
+        }
+        //
+        // Without a port field
+        [Test]
+        public void ConstructorPort()
+        {
+            // Arrange
+            Service constructorNonSSl;
+
+            // Act
+            constructorNonSSl = new Service("localhost",2020);
+
+            // Assert
+            Assert.AreEqual("http://localhost:2020/", constructorNonSSl.BaseUrl);
         }
 
         // Post Method
