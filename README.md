@@ -26,7 +26,11 @@ Custard is a .NET core library allowing to make API method calls easily. 😁
 ```C#
 Service yourService = new Service(string host, int port = 80, bool sslCertificate = false); 
 ```
-
+- ### Create headers
+```C#
+IDictionary<string, string> headers = new Dictionary<string, string>();
+headers.Add("Hearder", "Value "); // Do this for every headers
+```
 - ### Call a POST method
 
   **Parameters**:
