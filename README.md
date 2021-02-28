@@ -100,5 +100,5 @@ headers.Add("Hearder", "Value "); // Do this for every headers
   ```
 
 
+> ⚠ If you want to return a model the Http response body has to be in JSON format
 
-**I didn't finish the documentation, that why it's so ugly. Sorry about that 😁**
