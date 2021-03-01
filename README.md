@@ -21,7 +21,7 @@ Custard is a .NET standard plugin to intuitively call web APIs. 😁
   dotnet add package Custard --version 0.1.4
   ```
 ## Custard.Service
-- ### Instanciate a service object:
+- ### Instantiate a service object:
 
 ```C#
 Service yourService = new Service(string host, int port = 80, bool sslCertificate = false); 
