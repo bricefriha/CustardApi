@@ -6,7 +6,7 @@
 # What's Custard? 
 [![NuGet](https://img.shields.io/nuget/v/Custard.svg?style=flat)](https://www.nuget.org/packages/Custard/)
 
-Custard is a .NET standard plugin to intuitively call web apis. 😁
+Custard is a .NET standard plugin to intuitively call web APIs. 😁
 
 
 
