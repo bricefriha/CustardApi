@@ -81,7 +81,7 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            User actualResult = await _service.ExecutePost<User>( "users", "authenticate", null,  body);
+            User actualResult = await _service.ExecutePost<User>( "users", "authenticate", jsonBody: body);
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
@@ -127,7 +127,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>( "todolists", null, headers);
+            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>( "todolists", headers: headers);
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
@@ -259,7 +259,7 @@ namespace NUnitTestCustardApi
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.ExecuteDelete ("todolists", null, headers, null, parameters);
+            string actualResult = await _service.ExecuteDelete ("todolists", headers: headers, parameters: parameters);
 
             // Assert
             Console.WriteLine(actualResult);
