@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -164,7 +165,7 @@ namespace CustardApi.Objects
         /// <param name="headers"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string jsonBody, string action, IDictionary<string, string> headers, string[] parameters, HttpMethod httpMethod, Action callbackError)
+        private async Task<T> Process<T>(string controller, string jsonBody, string action, IDictionary<string, string> headers, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode> callbackError)
         {
             var result = default(T);
             // Build the url
@@ -216,7 +217,7 @@ namespace CustardApi.Objects
                                 }
                                 else
                                     // Run the callback
-                                    callbackError();
+                                    callbackError(response.StatusCode);
                             }
                         }
                     }
