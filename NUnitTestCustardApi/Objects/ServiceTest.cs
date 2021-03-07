@@ -280,7 +280,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>("errorTest", headers: headers, callbackError: (code) => {
+            await _service.ExecuteGet("errorTest", headers: headers, callbackError: (code) => {
                 actualCode = code;
             });
 
