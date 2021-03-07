@@ -7,6 +7,7 @@ using NUnitTestCustardApi.ModelsTest;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
+using System.Net;
 
 namespace NUnitTestCustardApi
 {
@@ -264,6 +265,27 @@ namespace NUnitTestCustardApi
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
+        }
+        // Test Callback with  http code status parameter
+        [Test]
+        public async Task MethodWithCallback()
+        {
+            // Arrange
+            HttpStatusCode? expectationCode = HttpStatusCode.NotFound;
+            HttpStatusCode? actualCode = HttpStatusCode.OK;
+
+            IDictionary<string, string> headers = new Dictionary<string, string>();
+
+            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+
+
+            // Act
+            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>("errorTest", headers: headers, callbackError: (code) => {
+                actualCode = code;
+            });
+
+            // Assert
+            Assert.AreEqual(expectationCode, actualCode);
         }
     }
 }
