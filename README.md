@@ -102,21 +102,3 @@ headers.Add("Hearder", "Value "); // Do this for every headers
 
 > ⚠ If you want to return a model the Http response body has to be in JSON format
 
-- ### Callback Error
-  If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
-  Here's how it works:
-  ``` Csharp
-  var actualResult = await _service.ExecuteGet("todolists", headers: headers, callbackError: (code) => 
-            {
-                switch (code):
-                          case HttpStatusCode.NotFound: 
-                                    // do something
-                                break;
-                           case HttpStatusCode.BadRequest: 
-                                    // do something else
-                                break;
-                          // .. etc
-            });
-  ```
-  - **code**: the error status code (HttpStatusCode).
-
