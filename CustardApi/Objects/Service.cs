@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CustardApi.Objects
 {
-    public class Service
+    public class Service : IDisposable
     {
         private string _host;
         private int _port;
@@ -44,7 +44,7 @@ namespace CustardApi.Objects
             _requestHeaders = new Dictionary<string, string>();
 
             // Set the base url up then
-            _baseUrl = (_sslCertificate ? "https" : "http") + "://"+ _host + (_port == 80 ? "/" : ":" + _port + "/"); 
+            _baseUrl = $"{ (_sslCertificate ? "https" : "http")} :// { _host} + { (_port == 80 ? "/" : ":" + _port + "/")}"; 
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -138,8 +138,6 @@ namespace CustardApi.Objects
         /// <returns></returns>
         public async Task<string> Put(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
-
-
             return await Process(controller, jsonBody, action, headers, parameters, HttpMethod.Put);
         }
         /// <summary>
@@ -173,16 +171,7 @@ namespace CustardApi.Objects
             string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
 
             // If there are some parameters
-            if (parameters != null)
-            {
-                // For each parameters
-                foreach (string parameter in parameters)
-                {
-                    // Add the parameter to the url
-                    methodUrl += "/" + parameter;
-
-                }
-            }
+            methodUrl = CreateUrl(parameters, methodUrl);
 
             // Build the request
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
@@ -203,20 +192,15 @@ namespace CustardApi.Objects
                 // Handler
                 try
                 {
-                    using (var handler = new HttpClientHandler())
-                    {
-                        using (var client = new HttpClient(handler))
-                        {
-                            using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead))
-                            {
-                                var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+                    using var handler = new HttpClientHandler();
+                    using var client = new HttpClient(handler);
+                    using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
 
-                                if (response.IsSuccessStatusCode)
-                                {
-                                    result = JsonConvert.DeserializeObject<T>(content);
-                                }
-                            }
-                        }
+                    var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        result = JsonConvert.DeserializeObject<T>(content);
                     }
                 }
                 catch (Exception ex)
@@ -227,6 +211,8 @@ namespace CustardApi.Objects
             }
 
             return result;
+
+            
         }
         /// <summary>
         /// Get get a string response
@@ -242,19 +228,10 @@ namespace CustardApi.Objects
             string result = string.Empty;
 
             // Build the url
-            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? string.Empty : "/" + action);
 
             // If there are some parameters
-            if (parameters != null)
-            {
-                // For each parameters
-                foreach (string parameter in parameters)
-                {
-                    // Add the parameter to the url
-                    methodUrl += "/" + parameter;
-
-                }
-            }
+            methodUrl = CreateUrl(parameters, methodUrl);
 
             // Build the request
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
@@ -275,17 +252,13 @@ namespace CustardApi.Objects
                 // Handler
                 try
                 {
-                    using (var handler = new HttpClientHandler())
-                    {
-                        using (var client = new HttpClient(handler))
-                        {
-                            using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead))
-                            {
-                                // Set the result from the response
-                                result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
-                            }
-                        }
-                    }
+                    using var handler = new HttpClientHandler();
+                    using var client = new HttpClient(handler);
+                    using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
+
+
+                    // Set the result from the response
+                    result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
                 }
                 catch (Exception ex)
                 {
@@ -295,6 +268,27 @@ namespace CustardApi.Objects
             }
 
             return result;
+        }
+        /// <summary>
+        ///  Method to create a url with the given parameters
+        /// </summary>
+        /// <param name="parameters">List of parameters</param>
+        /// <param name="initialUrl">The base url</param>
+        /// <returns>The url with all the parameters</returns>
+        private static string CreateUrl(string[] parameters, string initialUrl)
+        {
+            if (parameters != null)
+            {
+                // For each parameters
+                foreach (string parameter in parameters)
+                {
+                    // Add the parameter to the url
+                    initialUrl += $"/{parameter}";
+
+                }
+            }
+
+            return initialUrl;
         }
 
         #region Deprecated methods
@@ -480,7 +474,7 @@ namespace CustardApi.Objects
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("[Issue Handler]: " + ex.Message);
+                    throw new Exception($"[Issue Handler]: {ex.Message}");
                 }
 
             }
@@ -548,14 +542,20 @@ namespace CustardApi.Objects
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("[Issue Handler]: " + ex.Message);
+                    throw new Exception($"[Issue Handler]: {ex.Message}");
                 }
 
             }
 
             return result;
         }
-        #endregion
 
+
+        #endregion
+        public void Dispose()
+        {
+            // Remove all the headers
+            this._requestHeaders.Clear();
+        }
     }
 }
