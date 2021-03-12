@@ -84,6 +84,8 @@ namespace NUnitTestCustardApi
             // Act
             User actualResult = await _service.Post<User>( "users", "authenticate", jsonBody: body);
 
+            _service.Dispose();
+
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
         }
@@ -129,6 +131,8 @@ namespace NUnitTestCustardApi
             // Act
             Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists");
 
+            _service.Dispose();
+
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
         }
@@ -152,6 +156,8 @@ namespace NUnitTestCustardApi
 
             // Act
             Todolist actualResult = await _service.Put<Todolist>("todolists", "rename", body, parameters);
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.User, actualResult.User);
@@ -180,7 +186,9 @@ namespace NUnitTestCustardApi
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            DeleteCode actualResult = await _service.Delete<DeleteCode>("todolists", parameters: parameters); 
+            DeleteCode actualResult = await _service.Delete<DeleteCode>("todolists", parameters: parameters);
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.Status, actualResult.Status);
@@ -198,6 +206,8 @@ namespace NUnitTestCustardApi
             // Act
             string actualResult = await _service.Post( "users", "authenticate", jsonBody: body);
 
+            _service.Dispose();
+
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -214,6 +224,7 @@ namespace NUnitTestCustardApi
             // Act
             string actualResult = await _service.Get ( "todolists");
 
+            _service.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -233,6 +244,7 @@ namespace NUnitTestCustardApi
             // Act
             string actualResult = await _service.Put ("todolists", "rename", jsonBody: body, parameters: parameters);
 
+            _service.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -259,6 +271,8 @@ namespace NUnitTestCustardApi
             // Act
             string actualResult = await _service.Delete ("todolists", parameters: parameters);
 
+            _service.Dispose();
+
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -273,13 +287,15 @@ namespace NUnitTestCustardApi
 
             IDictionary<string, string> headers = new Dictionary<string, string>();
 
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            await _service.ExecuteGet("errorTest", headers: headers, callbackError: (code) => {
+            await _service.Get("errorTest", callbackError: (code) => {
                 actualCode = code;
             });
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(expectationCode, actualCode);
