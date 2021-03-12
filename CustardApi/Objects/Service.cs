@@ -44,7 +44,7 @@ namespace CustardApi.Objects
             _requestHeaders = new Dictionary<string, string>();
 
             // Set the base url up then
-            _baseUrl = $"{ (_sslCertificate ? "https" : "http")} :// { _host} + { (_port == 80 ? "/" : ":" + _port + "/")}"; 
+            _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}"; 
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -330,7 +330,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Put() instead and use the Service.RequestHeaders")]
-        public async Task<T> ExecutePut<T>( string controller, string action = null, IDictionary<string, string> headers, string jsonBody = null, string[] parameters = null)
+        public async Task<T> ExecutePut<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
 
