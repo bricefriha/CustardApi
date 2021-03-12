@@ -141,6 +141,20 @@ namespace CustardApi.Objects
             return await Process(controller, jsonBody, action, headers, parameters, HttpMethod.Put);
         }
         /// <summary>
+        /// Execute a post method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            // Get the reponse
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Post);
+        }
+        /// <summary>
         /// Execute a delete method and return a model
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
