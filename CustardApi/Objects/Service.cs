@@ -17,6 +17,7 @@ namespace CustardApi.Objects
         private bool _sslCertificate;
         private string _lastController;
         private string _lastAction;
+        private Dictionary<string, string> _requestHeaders;
 
         
 
@@ -26,6 +27,7 @@ namespace CustardApi.Objects
         public string LastController { get => _lastController; set => _lastController = value; }
         public string LastAction { get => _lastAction; set => _lastAction = value; }
         public string BaseUrl { get => _baseUrl; }
+        public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
 
         /// <summary>
         /// Constructor
@@ -39,6 +41,7 @@ namespace CustardApi.Objects
             _host = host;
             _port = port;
             _sslCertificate = sslCertificate;
+            _requestHeaders = new Dictionary<string, string>();
 
             // Set the base url up then
             _baseUrl = (_sslCertificate ? "https" : "http") + "://"+ _host + (_port == 80 ? "/" : ":" + _port + "/"); 
@@ -51,7 +54,260 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<T> ExecutePost<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<T> Get<T>(string controller, string action = null,  string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+
+            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Put);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            // Get the reponse
+            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Delete);
+        }
+        /// <summary>
+        /// Execute a post method without header and return a string
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> ExecutePost(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Post);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Get);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> Put(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        {
+
+
+            return await Process(controller, jsonBody, action, headers, parameters, HttpMethod.Put);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        public async Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        {
+
+            // Get the reponse
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Delete);
+        }
+        /// <summary>
+        /// Get get a response
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller"></param>
+        /// <param name="jsonBody"></param>
+        /// <param name="action"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpMethod"></param>
+        /// <returns>response of the method in the form of a model</returns>
+        private async Task<T> Process<T>(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod)
+        {
+            var result = default(T);
+            // Build the url
+            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+
+            // If there are some parameters
+            if (parameters != null)
+            {
+                // For each parameters
+                foreach (string parameter in parameters)
+                {
+                    // Add the parameter to the url
+                    methodUrl += "/" + parameter;
+
+                }
+            }
+
+            // Build the request
+            using (var request = new HttpRequestMessage(httpMethod, methodUrl))
+            {
+                // Content of the request
+                if (jsonBody != null)
+                {
+                    request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                }
+                // Headers of the request
+                if (this._requestHeaders != null)
+                {
+                    foreach (var h in this._requestHeaders)
+                    {
+                        request.Headers.Add(h.Key, h.Value);
+                    }
+                }
+                // Handler
+                try
+                {
+                    using (var handler = new HttpClientHandler())
+                    {
+                        using (var client = new HttpClient(handler))
+                        {
+                            using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead))
+                            {
+                                var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    result = JsonConvert.DeserializeObject<T>(content);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("[Issue Handler]: " + ex.Message);
+                }
+
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Get get a string response
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="jsonBody"></param>
+        /// <param name="action"></param>
+        /// <param name="headers"></param>
+        /// <param name="httpMethod"></param>
+        /// <returns>response of the method in the form of a string</returns>
+        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod)
+        {
+            string result = string.Empty;
+
+            // Build the url
+            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+
+            // If there are some parameters
+            if (parameters != null)
+            {
+                // For each parameters
+                foreach (string parameter in parameters)
+                {
+                    // Add the parameter to the url
+                    methodUrl += "/" + parameter;
+
+                }
+            }
+
+            // Build the request
+            using (var request = new HttpRequestMessage(httpMethod, methodUrl))
+            {
+                // Content of the request
+                if (jsonBody != null)
+                {
+                    request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                }
+                // Headers of the request
+                if (this._requestHeaders != null)
+                {
+                    foreach (var h in this._requestHeaders)
+                    {
+                        request.Headers.Add(h.Key, h.Value);
+                    }
+                }
+                // Handler
+                try
+                {
+                    using (var handler = new HttpClientHandler())
+                    {
+                        using (var client = new HttpClient(handler))
+                        {
+                            using (var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead))
+                            {
+                                // Set the result from the response
+                                result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("[Issue Handler]: " + ex.Message);
+                }
+
+            }
+
+            return result;
+        }
+
+        #region Deprecated methods
+        /// <summary>
+        /// Execute a post method without header and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <returns></returns>
+        [Obsolete("Please use Post() instead and use the Service.RequestHeaders")]
+        public async Task<T> ExecutePost<T>( string controller, string action = null, IDictionary<string, string> headers= null, string jsonBody = null, string[] parameters = null)
         {
 
             return await Process<T>(controller, jsonBody, action, headers, parameters, HttpMethod.Post);
@@ -65,6 +321,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
+        [Obsolete("Please use Get() instead and use the Service.RequestHeaders")]
         public async Task<T> ExecuteGet<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
@@ -78,7 +335,8 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<T> ExecutePut<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        [Obsolete("Please use Put() instead and use the Service.RequestHeaders")]
+        public async Task<T> ExecutePut<T>( string controller, string action = null, IDictionary<string, string> headers, string jsonBody = null, string[] parameters = null)
         {
 
 
@@ -92,6 +350,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
+        [Obsolete("Please use Delete() instead and use the Service.RequestHeaders")]
         public async Task<T> ExecuteDelete<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
@@ -106,6 +365,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
+        [Obsolete("Please use Post() instead and use the Service.RequestHeaders")]
         public async Task<string> ExecutePost (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
@@ -133,6 +393,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
+        [Obsolete("Please use Put() instead and use the Service.RequestHeaders")]
         public async Task<string> ExecutePut (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
@@ -147,6 +408,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
+        [Obsolete("Please use Delete() instead and use the Service.RequestHeaders")]
         public async Task<string> ExecuteDelete (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
@@ -293,5 +555,7 @@ namespace CustardApi.Objects
 
             return result;
         }
+        #endregion
+
     }
 }
