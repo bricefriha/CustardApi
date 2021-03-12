@@ -121,7 +121,6 @@ namespace NUnitTestCustardApi
                 },
 
             };
-            IDictionary<string, string> headers = new Dictionary<string, string>() ;
 
             _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
@@ -144,7 +143,6 @@ namespace NUnitTestCustardApi
             };
 
             string body = "{ \"title\": \"Workout\" }";
-            IDictionary<string, string> headers = new Dictionary<string, string>();
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
@@ -171,7 +169,6 @@ namespace NUnitTestCustardApi
             };
             ///
             /// Prepare the header
-            IDictionary<string, string> headers = new Dictionary<string, string>();
             _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
@@ -210,13 +207,11 @@ namespace NUnitTestCustardApi
         public async Task GetMethodWithTokenString()
         {
             // Arrange
-            IDictionary<string, string> headers = new Dictionary<string, string>() ;
-
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            string actualResult = await _service.ExecuteGet ( "todolists", headers: headers);
+            string actualResult = await _service.Get ( "todolists");
 
             // Assert
             Console.WriteLine(actualResult);
@@ -228,7 +223,6 @@ namespace NUnitTestCustardApi
         {
             // Arrange
             string body = "{ \"title\": \"Workout\" }";
-            IDictionary<string, string> headers = new Dictionary<string, string>();
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
@@ -250,7 +244,6 @@ namespace NUnitTestCustardApi
             // Arrange
             ///
             /// Prepare the header
-            IDictionary<string, string> headers = new Dictionary<string, string>();
             _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
