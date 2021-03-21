@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Resources\image\Custard.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

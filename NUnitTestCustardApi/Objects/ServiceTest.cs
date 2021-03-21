@@ -82,7 +82,9 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            User actualResult = await _service.ExecutePost<User>( "users", "authenticate", jsonBody: body);
+            User actualResult = await _service.Post<User>( "users", "authenticate", jsonBody: body);
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
@@ -122,13 +124,14 @@ namespace NUnitTestCustardApi
                 },
 
             };
-            IDictionary<string, string> headers = new Dictionary<string, string>() ;
 
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.ExecuteGet<Collection<Todolist>>( "todolists", headers: headers);
+            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists");
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
@@ -145,18 +148,21 @@ namespace NUnitTestCustardApi
             };
 
             string body = "{ \"title\": \"Workout\" }";
-            IDictionary<string, string> headers = new Dictionary<string, string>();
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
 
 
             // Act
-            Todolist actualResult = await _service.ExecutePut<Todolist>("todolists", "rename", headers, body, parameters);
+            Todolist actualResult = await _service.Put<Todolist>("todolists", "rename", body, parameters);
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.User, actualResult.User);
+
+            _service.Dispose();
         }
 
         // Delete Method
@@ -170,18 +176,19 @@ namespace NUnitTestCustardApi
             };
             ///
             /// Prepare the header
-            IDictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
-            Todolist itemToDelete = await _service.ExecutePost<Todolist>("todolists", "create", headers, body);
+            Todolist itemToDelete = await _service.Post<Todolist>("todolists", "create", body);
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            DeleteCode actualResult = await _service.ExecuteDelete<DeleteCode>("todolists", null, headers, null, parameters); 
+            DeleteCode actualResult = await _service.Delete<DeleteCode>("todolists", parameters: parameters);
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.Status, actualResult.Status);
@@ -197,7 +204,9 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            string actualResult = await _service.ExecutePost ( "users", "authenticate", null,  body);
+            string actualResult = await _service.Post( "users", "authenticate", jsonBody: body);
+
+            _service.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
@@ -209,14 +218,13 @@ namespace NUnitTestCustardApi
         public async Task GetMethodWithTokenString()
         {
             // Arrange
-            IDictionary<string, string> headers = new Dictionary<string, string>() ;
-
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            string actualResult = await _service.ExecuteGet ( "todolists", null, headers);
+            string actualResult = await _service.Get ( "todolists");
 
+            _service.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -227,16 +235,16 @@ namespace NUnitTestCustardApi
         {
             // Arrange
             string body = "{ \"title\": \"Workout\" }";
-            IDictionary<string, string> headers = new Dictionary<string, string>();
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
 
 
             // Act
-            string actualResult = await _service.ExecutePut ("todolists", "rename", headers, body, parameters);
+            string actualResult = await _service.Put ("todolists", "rename", jsonBody: body, parameters: parameters);
 
+            _service.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -249,18 +257,21 @@ namespace NUnitTestCustardApi
             // Arrange
             ///
             /// Prepare the header
-            IDictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
-            Todolist itemToDelete = await _service.ExecutePost<Todolist>("todolists", "create", headers, body);
+
+            Todolist itemToDelete = await _service.Post<Todolist>("todolists", "create", body);
+
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.ExecuteDelete ("todolists", headers: headers, parameters: parameters);
+            string actualResult = await _service.Delete ("todolists", parameters: parameters);
+
+            _service.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
@@ -276,13 +287,15 @@ namespace NUnitTestCustardApi
 
             IDictionary<string, string> headers = new Dictionary<string, string>();
 
-            headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            await _service.ExecuteGet("errorTest", headers: headers, callbackError: (code) => {
+            await _service.Get("errorTest", callbackError: (code) => {
                 actualCode = code;
             });
+
+            _service.Dispose();
 
             // Assert
             Assert.AreEqual(expectationCode, actualCode);
