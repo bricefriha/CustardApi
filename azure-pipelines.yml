@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+parameters:
+  - name: buildConfig
+    displayName: Buildl Configuration to Use
+    default: Debug
+    values:
+      - Debug
+      - Release
+      
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+ buildConfiguration: ${{ parameters.buildConfig }}
+
+steps:
+- task: UseDotNet@2
+  displayName: Setup .NET SDK Version 3.x
+  inputs:
+    packageType: sdk
+    version: 3.x
+    includePreviewVersions: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the Assembly'
+  inputs:
+    command: build
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Package up the Assembly
+  inputs:
+   command: 'pack'
+   packagesToPack: './CustardApi/*.csproj'
+   nobuild: true
+   verbosityPack: 'Normal'
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet Authenticate'
+- task: NuGetCommand@2
+  inputs:
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'a8ab3d8e-f2fb-4254-bf53-2f67a7330559'
