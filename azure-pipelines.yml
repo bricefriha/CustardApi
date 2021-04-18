@@ -46,6 +46,6 @@ steps:
   displayName: 'NuGet Authenticate'
 - task: NuGetCommand@2
   inputs:
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'a8ab3d8e-f2fb-4254-bf53-2f67a7330559'
