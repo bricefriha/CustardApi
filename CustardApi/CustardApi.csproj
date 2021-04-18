@@ -17,6 +17,17 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>5</VersionBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix Condition=" '$(BUILD_BUILDNUMBER)' == '' ">$(VersionMajor).$(VersionMinor).$(VersionBuild)-local</VersionPrefix>
+    <VersionPrefix Condition=" '$(BUILD_BUILDNUMBER)' != '' And '$(Configuration)' == 'Debug'" >$(VersionMajor).$(VersionMinor).$(VersionBuild)-$(BUILD_BUILDNUMBER)-preview</VersionPrefix>
+    <VersionPrefix Condition=" '$(Configuration)' != 'Debug'">$(VersionMajor).$(VersionMinor).$(VersionBuild)</VersionPrefix>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
