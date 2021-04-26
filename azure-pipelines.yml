@@ -45,8 +45,8 @@ steps:
 - task: NuGetAuthenticate@0
   displayName: 'NuGet Authenticate'
 - task: NuGetCommand@2
-  displayName: 'Publish the NuGet Package'
   inputs:
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'a8ab3d8e-f2fb-4254-bf53-2f67a7330559'
+    publishVstsFeed: '9be038d0-6fcd-4e79-b1a5-1d45141d58a5/b940ac25-48de-4f50-ad6a-851d55932486'
