@@ -12,7 +12,6 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/bricefriha/CustardApi</RepositoryUrl>
-    <PackageIcon>Custard.png</PackageIcon>
     <Description>Custard is a .NET Standard library allowing to make API method calls easily. 😁</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
