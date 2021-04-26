@@ -32,8 +32,6 @@ steps:
   displayName: 'Build the Assembly'
   inputs:
     command: build
-    versioningScheme: byBuildNumber
-    arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Package up the Assembly
