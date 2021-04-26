@@ -32,26 +32,21 @@ steps:
   displayName: 'Build the Assembly'
   inputs:
     command: build
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Package up the Assembly
   inputs:
    command: 'pack'
-   packagesToPack: '.csproj'
+   packagesToPack: './CustardApi/*.csproj'
    nobuild: true
    verbosityPack: 'Normal'
-  
 - task: NuGetAuthenticate@0
   displayName: 'NuGet Authenticate'
-- task: NuGetCommand@2
-  inputs:
-    command: 'pack'
-    packagesToPack: './CustardApi/*.csproj'
-    versioningScheme: 'off'
 - task: NuGetCommand@2
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '9be038d0-6fcd-4e79-b1a5-1d45141d58a5/0a972c4a-dc73-4f04-b4de-9c25d9ab5937'
-
