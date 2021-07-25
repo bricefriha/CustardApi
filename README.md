@@ -6,19 +6,31 @@
 # What's Custard? 
 [![NuGet](https://img.shields.io/nuget/v/Custard.svg?style=flat)](https://www.nuget.org/packages/Custard/)
 
-Custard is a .NET core library allowing to make API method calls easily. 😁
+Custard is a .NET standard plugin to intuitively call web APIs. 😁
 
 
 
 # Documentation 📄
-
+## Installation
+- Package manager
+  ```Bash
+  Install-Package Custard -Version 0.1.4
+  ```
+- .NET CLI
+  ```Bash
+  dotnet add package Custard --version 0.1.4
+  ```
 ## Custard.Service
-- ### Instanciate a service object:
+- ### Instantiate a service object:
 
 ```C#
 Service yourService = new Service(string host, int port = 80, bool sslCertificate = false); 
 ```
-
+- ### Create headers
+```C#
+IDictionary<string, string> headers = new Dictionary<string, string>();
+headers.Add("Hearder", "Value "); // Do this for every headers
+```
 - ### Call a POST method
 
   **Parameters**:
@@ -88,6 +100,8 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
   ```
 
 
+> ⚠ If you want to return a model the Http response body has to be in JSON format
+
 
   **I didn't finish the documentation, that why it's so ugly. Sorry about that 😁**
 
@@ -108,3 +122,4 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
             });
   ```
   - **code**: the error status code (HttpStatusCode).
+
