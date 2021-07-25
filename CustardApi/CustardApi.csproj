@@ -38,13 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\image\Custard.png">
+    <File Include="Resources\image\Custard.png">
 
-    <None Include="..\LICENSE">
+    <File Include="..\LICENSE">
 
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
+    </File>
   </ItemGroup>
 
 </Project>
