@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>8.0</LangVersion>
     <Version>0.1.4</Version>
     <Authors>Brice Friha</Authors>
     <Product>Custard</Product>
@@ -34,17 +35,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- <metadata Include="Resources\image\Custard.png"> -->
-
-    <files Include="..\LICENSE">
-
+	  <None Include="Resources\image\Custard.png" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </files>
+    </None>
   </ItemGroup>
 
 </Project>
