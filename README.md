@@ -21,37 +21,49 @@ Custard is a .NET standard plugin to intuitively call web APIs. 😁
   dotnet add package Custard --version 0.1.6
   ```
 ## Custard.Service
-- ### Instantiate a service object:
+### Instantiate a service object:
 
 ```C#
 Service yourService = new Service(string host, int port = 80, bool sslCertificate = false); 
 ```
-- ### Create headers
+### headers
+
+#### Add
 ```C#
-IDictionary<string, string> headers = new Dictionary<string, string>();
-headers.Add("Hearder", "Value "); // Do this for every headers
+yourService.RequestHeaders.Add("Key", "value");
 ```
-- ### Call a POST method
+
+#### Remove a specific header
+```C#
+yourService.RequestHeaders.Remove("Key");
+```
+#### Remove all the headers
+```C#
+yourService.RequestHeaders.Clear();
+```
+
+### Calls
+- #### Call a POST method
 
   **Parameters**:
 
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
   |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *action* | string   |     |
+  |  *headers* | IDictionary<string, string>   |    |
+  |  *jsonBody* | string   |     |
+  |  *parameters* | string[]   |     |
 
 
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePost (controller, action, headers, jsonBody, parameters);
+    yourService.Post (controller, action, headers, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Post<T> (controller, action, headers, jsonBody, parameters);
     ```
 - ### Call a PUT method
 
@@ -60,10 +72,10 @@ headers.Add("Hearder", "Value "); // Do this for every headers
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
   |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *action* | string   |     |
+  |  *headers* | IDictionary<string, string>   |    |
+  |  *jsonBody* | string   |     |
+  |  *parameters* | string[]   |     |
 
 
   **Usage**:
@@ -83,10 +95,10 @@ headers.Add("Hearder", "Value "); // Do this for every headers
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
   |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *action* | string   |     |
+  |  *headers* | IDictionary<string, string>   |    |
+  |  *jsonBody* | string   |     |
+  |  *parameters* | string[]   |     |
 
 
   **Usage**:
@@ -102,14 +114,11 @@ headers.Add("Hearder", "Value "); // Do this for every headers
 
 > ⚠ If you want to return a model the Http response body has to be in JSON format
 
-
-  **I didn't finish the documentation, that why it's so ugly. Sorry about that 😁**
-
 - ### Callback Error
   If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
-  var actualResult = await _service.ExecuteGet("todolists", headers: headers, callbackError: (code) => 
+  var actualResult = await _service.Get("todolists", headers: headers, callbackError: (code) => 
             {
                 switch (code):
                           case HttpStatusCode.NotFound: 
