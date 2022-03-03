@@ -59,11 +59,11 @@ yourService.RequestHeaders.Clear();
   **Usage**:
   - To return a string:
     ```C#
-    yourService.Post (controller, action, headers, jsonBody, parameters);
+    yourService.Post (controller, action, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.Post<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Post<T> (controller, action, jsonBody, parameters);
     ```
 - ### Call a PUT method
 
@@ -81,11 +81,11 @@ yourService.RequestHeaders.Clear();
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePut (controller, action, headers, jsonBody, parameters);
+    yourService.ExecutePut (controller, action, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
+    yourService.ExecutePut<T> (controller, action, jsonBody, parameters);
     ```
 
 - ### Call a GET method
@@ -104,11 +104,11 @@ yourService.RequestHeaders.Clear();
   **Usage**:
   - To return a string:
   ```C#
-  yourService.ExecuteGet (controller, action, headers, jsonBody, parameters);
+  yourService.Get (controller, action, jsonBody, parameters, callbackError);
   ```
   - To return a model (T is the model):
   ```C#
-  yourService.ExecuteGet<T> (controller, action, headers, jsonBody, parameters);
+  yourService.Get<T> (controller, action, jsonBody, parameters, callbackError);
   ```
 
 
@@ -116,11 +116,13 @@ yourService.RequestHeaders.Clear();
 
 - ### Callback Error
   If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
+  This can work for any type of method
   Here's how it works:
   ``` Csharp
-  var actualResult = await _service.Get("todolists", headers: headers, callbackError: (code) => 
+  var actualResult = await _service.Get("todolists", callbackError: (code) => 
             {
-                switch (code):
+                switch (code)
+                {
                           case HttpStatusCode.NotFound: 
                                     // do something
                                 break;
@@ -128,6 +130,7 @@ yourService.RequestHeaders.Clear();
                                     // do something else
                                 break;
                           // .. etc
+                 }
             });
   ```
   - **code**: the error status code (HttpStatusCode).
