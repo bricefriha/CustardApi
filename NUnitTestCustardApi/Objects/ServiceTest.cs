@@ -18,7 +18,14 @@ namespace NUnitTestCustardApi
         [SetUp]
         public void Setup()
         {
-            _service = new Service("localhost");
+            _service = new Service("lotusaitest.azurewebsites.net", sslCertificate: true) ;
+        }
+        [Test]
+        public async Task LotusAiLogin()
+        {
+            //string body = $"{{ \"email\": \"{ _email}\", \"password\": \"{ _password }\" }}";
+            await _service.Post(action: "authenticate", controller: "authenticateuserbyemail", jsonBody: "{ \"email\": \"jason+mobiletest1@lotusai.co\", \"password\": \"u1oX9es6IOIf\" }");
+            Assert.Pass();
         }
         // Construtor
         //
@@ -101,7 +108,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
+            Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
         }
         // Post Method
         // With a body a token but no params 
@@ -148,7 +155,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
+            Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
         }
         // Put Method
         [Test]
@@ -174,7 +181,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.User, actualResult.User);
+            Assert.AreEqual(Expectation.User, actualResult?.User);
 
             _service.Dispose();
         }
@@ -205,7 +212,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.Status, actualResult.Status);
+            Assert.AreEqual(Expectation.Status, actualResult?.Status);
         }
         // Post Method
         //

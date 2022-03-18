@@ -20,7 +20,7 @@ namespace CustardApi.Objects
         private string _lastAction;
         private Dictionary<string, string> _requestHeaders;
 
-        
+
 
         public string Host { get => _host; set => _host = value; }
         public int Port { get => _port; set => _port = value; }
@@ -45,7 +45,7 @@ namespace CustardApi.Objects
             _requestHeaders = new Dictionary<string, string>();
 
             // Set the base url up then
-            _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}"; 
+            _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}";
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -69,7 +69,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<T> Get<T>(string controller, string action = null,  string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
+        public async Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
         {
 
             return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError);
@@ -179,7 +179,7 @@ namespace CustardApi.Objects
         /// <param name="headers"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?> callbackError = null, IDictionary<string,string> headers = null )
+        private async Task<T> Process<T>(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> headers = null)
         {
             var result = default(T);
             // Build the url
@@ -225,8 +225,12 @@ namespace CustardApi.Objects
                         result = JsonConvert.DeserializeObject<T>(content);
                     }
                     else
-                        // Run the callback
-                        callbackError(response.StatusCode);
+                    {
+                        if (callbackError != null)
+                            // Run the callback
+                            callbackError(response.StatusCode);
+
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -237,7 +241,7 @@ namespace CustardApi.Objects
 
             return result;
 
-            
+
         }
         /// <summary>
         /// Get get a string response
@@ -340,7 +344,7 @@ namespace CustardApi.Objects
         /// <param name="callbackError">Call back if there is an error</param>
         /// <returns></returns>
         [Obsolete("Please use Post() instead and use the Service.RequestHeaders")]
-        public async Task<T> ExecutePost<T>( string controller, string action = null, IDictionary<string, string> headers= null, string jsonBody = null, string[] parameters = null)
+        public async Task<T> ExecutePost<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
             return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post, headers: headers);
@@ -355,10 +359,10 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Get() instead and use the Service.RequestHeaders")]
-        public async Task<T> ExecuteGet<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<T> ExecuteGet<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers );
+            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -369,7 +373,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Put() instead and use the Service.RequestHeaders")]
-        public async Task<T> ExecutePut<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<T> ExecutePut<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
 
@@ -384,7 +388,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Delete() instead and use the Service.RequestHeaders")]
-        public async Task<T> ExecuteDelete<T>( string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<T> ExecuteDelete<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
             // Get the reponse
@@ -399,7 +403,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Post() instead and use the Service.RequestHeaders")]
-        public async Task<string> ExecutePost (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<string> ExecutePost(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
             return await Process(controller, jsonBody, action, parameters, HttpMethod.Post, headers: headers);
@@ -413,10 +417,10 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<string> ExecuteGet (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
+        public async Task<string> ExecuteGet(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
         {
 
-            return await Process (controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers);
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -427,11 +431,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Put() instead and use the Service.RequestHeaders")]
-        public async Task<string> ExecutePut (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<string> ExecutePut(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
 
-            return await Process (controller, jsonBody, action, parameters, HttpMethod.Put, headers: headers);
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Put, headers: headers);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -442,11 +446,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
         [Obsolete("Please use Delete() instead and use the Service.RequestHeaders")]
-        public async Task<string> ExecuteDelete (string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
+        public async Task<string> ExecuteDelete(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
             // Get the reponse
-            return await Process (controller, jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
+            return await Process(controller, jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
         }
 
 
