@@ -108,7 +108,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.ToString(), actualResult.ToString());
+            Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
         }
         // Post Method
         // With a body a token but no params 
@@ -181,7 +181,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.User, actualResult.User);
+            Assert.AreEqual(Expectation.User, actualResult?.User);
 
             _service.Dispose();
         }
@@ -212,7 +212,7 @@ namespace NUnitTestCustardApi
             _service.Dispose();
 
             // Assert
-            Assert.AreEqual(Expectation.Status, actualResult.Status);
+            Assert.AreEqual(Expectation.Status, actualResult?.Status);
         }
         // Post Method
         //
