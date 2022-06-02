@@ -149,7 +149,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        public async Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
         {
 
             // Get the reponse
@@ -163,7 +163,7 @@ namespace CustardApi.Objects
         /// <param name="action">name of the action</param>
         /// <param name="jsonBody">body in json</param>
         /// <returns></returns>
-        public async Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null)
+        public async Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
         {
 
             // Get the reponse
