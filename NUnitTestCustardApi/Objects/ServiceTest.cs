@@ -18,7 +18,7 @@ namespace NUnitTestCustardApi
         [SetUp]
         public void Setup()
         {
-            _service = new Service("lotusaitest.azurewebsites.net", sslCertificate: true) ;
+            _service = new Service("api.gamhub.io", sslCertificate: true) ;
         }
         [Test]
         public async Task LotusAiLogin()
@@ -109,6 +109,53 @@ namespace NUnitTestCustardApi
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
+        }
+        // Post Method
+        // With a body a token but no params 
+        [Test]
+        public async Task GetMethod()
+        {
+            // Arrange
+            //Collection<Todolist> Expectation = new Collection<Todolist>
+            //{
+            //    new Todolist
+            //    {
+            //        Title = "Shopping list",
+            //        User = "5ee0e25556294c2c70ee128b"
+            //    },
+            //    new Todolist
+            //    {
+            //        Title = "Shopping list",
+            //        User = "5ee0e25556294c2c70ee128b"
+            //    },
+            //    new Todolist
+            //    {
+            //        Title = "Shopping list",
+            //        User = "5ee0e25556294c2c70ee128b"
+            //    },
+            //    new Todolist
+            //    {
+            //        Title = "Shopping list",
+            //        User = "5ee0e25556294c2c70ee128b"
+            //    },
+            //    new Todolist
+            //    {
+            //        Title = "Shopping list",
+            //        User = "5ee0e25556294c2c70ee128b"
+            //    },
+
+            //};
+
+            //_service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+
+
+            // Act
+            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds");
+
+            _service.Dispose();
+
+            // Assert
+            Assert.Greater(actualResult?.Count,0 );
         }
         // Post Method
         // With a body a token but no params 

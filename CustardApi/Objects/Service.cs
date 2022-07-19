@@ -57,10 +57,10 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public  Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -72,10 +72,10 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -86,11 +86,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -101,11 +101,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -117,10 +117,10 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -131,9 +131,9 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -144,11 +144,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -159,11 +159,11 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public async Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Get get a response
