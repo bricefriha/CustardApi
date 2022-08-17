@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -120,7 +121,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -133,7 +134,7 @@ namespace CustardApi.Objects
         /// <returns></returns>
         public Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -148,7 +149,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -163,7 +164,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Delete, callbackError, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Get get a response
@@ -205,16 +206,17 @@ namespace CustardApi.Objects
                 else
                     reqHeaders = this._requestHeaders;
                 // Headers of the request
-                if (this._requestHeaders != null)
+                if (singleUseHeaders == null && this._requestHeaders != null)
                 {
                     foreach (var h in this._requestHeaders)
                     {
+                        
                         request.Headers.Add(h.Key, h.Value);
                     }
                 }
-                else if (headers != null)
+                else if (reqHeaders != null)
                 {
-                    foreach (var h in headers)
+                    foreach (var h in reqHeaders)
                     {
                         request.Headers.Add(h.Key, h.Value);
                     }
@@ -230,7 +232,10 @@ namespace CustardApi.Objects
 
                     if (response.IsSuccessStatusCode)
                     {
-                        result = JsonConvert.DeserializeObject<T>(content);
+                        if (typeof(T) == typeof(string))
+                            result = (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
+                        else
+                            result = JsonConvert.DeserializeObject<T>(content);
                     }
                     else
                     {
@@ -260,7 +265,7 @@ namespace CustardApi.Objects
         /// <param name="headers"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a string</returns>
-        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> headers = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?, IDictionary<string, string>> callbackError = null, IDictionary<string, string> headers = null, IDictionary<string, string> singleUseHeaders = null)
         {
             string result = string.Empty;
 
@@ -279,7 +284,7 @@ namespace CustardApi.Objects
                                                  .ToDictionary(x => x.Key, g => g.First());
             else
                 reqHeaders = this._requestHeaders;
-
+            Debug.WriteLine(reqHeaders);
             // Build the request
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
             {
@@ -289,16 +294,19 @@ namespace CustardApi.Objects
                     request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                 }
                 // Headers of the request
-                if (reqHeaders != null)
+
+                // Headers of the request
+                if (singleUseHeaders == null && this._requestHeaders != null)
                 {
                     foreach (var h in this._requestHeaders)
                     {
+
                         request.Headers.Add(h.Key, h.Value);
                     }
                 }
-                else if (headers != null)
+                else if (reqHeaders != null)
                 {
-                    foreach (var h in headers)
+                    foreach (var h in reqHeaders)
                     {
                         request.Headers.Add(h.Key, h.Value);
                     }
@@ -318,7 +326,7 @@ namespace CustardApi.Objects
                     }
                     else
                         // Run the callback
-                        callbackError(response.StatusCode);
+                        callbackError(response.StatusCode, headers);
                 }
                 catch (Exception ex)
                 {

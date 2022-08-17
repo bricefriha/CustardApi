@@ -368,5 +368,31 @@ namespace NUnitTestCustardApi
             // Assert
             Assert.AreEqual(expectationCode, actualCode);
         }
+        // Test Callback with  http code status parameter
+        [Test]
+        public async Task TestOnISACode()
+        {
+            // Arrange
+            HttpStatusCode? expectationCode = HttpStatusCode.OK;
+            HttpStatusCode? actualCode = HttpStatusCode.OK;
+            IDictionary<string, string> sheaders = new Dictionary<string, string>();
+            var service = new Service("services.isanet.org", sslCertificate: true);
+
+            IDictionary<string, string> headers = new Dictionary<string, string>();
+
+            headers.Add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikt3M1hJWC1hcVZsNmdtcE03bWRIbCJ9.eyJpc3MiOiJodHRwczovL2lzYW1vYmlsZWFwcC51cy5hdXRoMC5jb20vIiwic3ViIjoiZFhxeUNvQjB1VndIZWNaeU9CUjdKdzAxU3haZGxHWjlAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vaXNhbW9iaWxlYXBwLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjYwNjYzOTAzLCJleHAiOjE2NjA3NTAzMDMsImF6cCI6ImRYcXlDb0IwdVZ3SGVjWnlPQlI3SncwMVN4WmRsR1o5Iiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.SNdvKQwY8vdcVTFpAsGJ8k1viykYziyNt6aGelMFK1Bm68PBUp3sBEG5WKNJSjYoKIAlmelvkr__TF3zdYFBW4e6EU85M0vzd09Wm7Q0ZYL-E8teRI4DSB0MES8rxDgTx45ZI_NO8CRZrLA6AauL7dzCh3A1L-70lHxj5ytQ9cuyB-mwNqexf7ssCKbN13e8s88nza0oRrFZCiwyxiaI4SSjqf0qoFvQy4tJtsiM5tgAhT_enOq8OWW7bkgz1h6iVkn1jUYtqg23EoJC06RJPwww3Ia-dWNuKUXNbUDAT2Z6J487bog45dMphFrVGdt4MnUkSjMuF7wzjOeAUwi1AA");
+
+            
+            // Act
+            await service.Get("api/mobileapp/api/v0/User", $"GetConferencesByUserID?userid=10096", singleUseHeaders: headers
+                , callbackError: (code) => {
+                actualCode = code;
+            });
+
+            service.Dispose();
+
+            // Assert
+            Assert.AreEqual(expectationCode, actualCode, $"code: {actualCode} \n Headers:{sheaders}");
+        }
     }
 }
