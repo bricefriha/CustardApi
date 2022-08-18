@@ -31,6 +31,7 @@ namespace CustardApi.Objects
         public string LastAction { get => _lastAction; set => _lastAction = value; }
         public string BaseUrl { get => _baseUrl; }
         public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
+        public Dictionary<string, string> LastCallRequestHeaders { get => _requestHeaders; private set => _requestHeaders = value; }
 
         /// <summary>
         /// Constructor
@@ -205,6 +206,9 @@ namespace CustardApi.Objects
                                                      .ToDictionary(x => x.Key, g => g.First());
                 else
                     reqHeaders = this._requestHeaders;
+
+                LastCallRequestHeaders = reqHeaders;
+
                 // Headers of the request
                 if (reqHeaders != null)
                     foreach (var h in reqHeaders)
@@ -275,7 +279,9 @@ namespace CustardApi.Objects
                                                  .ToDictionary(x => x.Key, g => g.First());
             else
                 reqHeaders = this._requestHeaders;
-            Debug.WriteLine(reqHeaders);
+
+            
+
             // Build the request
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
             {
