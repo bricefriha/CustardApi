@@ -206,21 +206,12 @@ namespace CustardApi.Objects
                 else
                     reqHeaders = this._requestHeaders;
                 // Headers of the request
-                if (singleUseHeaders == null && this._requestHeaders != null)
-                {
-                    foreach (var h in this._requestHeaders)
-                    {
-                        
-                        request.Headers.Add(h.Key, h.Value);
-                    }
-                }
-                else if (reqHeaders != null)
-                {
+                if (reqHeaders != null)
                     foreach (var h in reqHeaders)
                     {
                         request.Headers.Add(h.Key, h.Value);
                     }
-                }
+
                 // Handler
                 try
                 {
