@@ -29,6 +29,7 @@ namespace CustardApi.Objects
         public bool SslCertificate { get => _sslCertificate; set => _sslCertificate = value; }
         public string LastController { get => _lastController; set => _lastController = value; }
         public string LastAction { get => _lastAction; set => _lastAction = value; }
+        public string LastCall { get => _lastAction; set => _lastAction = value; }
         public string BaseUrl { get => _baseUrl; }
         public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
         public Dictionary<string, string> LastCallRequestHeaders { get => _requestHeaders; private set => _requestHeaders = value; }
@@ -59,7 +60,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public  Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public  Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
@@ -74,7 +75,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             return Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
@@ -88,7 +89,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
 
@@ -103,7 +104,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
@@ -119,7 +120,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
@@ -133,7 +134,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
             return Process<string>(controller, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
         }
@@ -146,7 +147,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
@@ -161,7 +162,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
+        public Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
             // Get the reponse
@@ -178,76 +179,84 @@ namespace CustardApi.Objects
         /// <param name="headers"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?> callbackError = null, IDictionary<string, string> singleUseHeaders = null, IDictionary<string, string> headers = null)
+        private async Task<T> Process<T>(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, IDictionary<string, string> headers = null)
         {
-            var result = default(T);
-            // Build the url
-            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
-
-            // If there are some parameters
-            methodUrl = CreateUrl(parameters, methodUrl);
-
-            // Build the request
-            using (var request = new HttpRequestMessage(httpMethod, methodUrl))
+            try
             {
-                // Content of the request
-                if (jsonBody != null)
+                var result = default(T);
+                // Build the url
+                string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+
+                // If there are some parameters
+                methodUrl = CreateUrl(parameters, methodUrl);
+                LastCall = methodUrl;
+                // Build the request
+                using (var request = new HttpRequestMessage(httpMethod, methodUrl))
                 {
-                    request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                }
-
-                // These are the headers we'll use in the request 
-                Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
-
-                // Merge single use headers with actual headers
-                if (singleUseHeaders != null)
-                    reqHeaders = this._requestHeaders.Concat(singleUseHeaders)
-                                                     .ToLookup(x => x.Key, x => x.Value)
-                                                     .ToDictionary(x => x.Key, g => g.First());
-                else
-                    reqHeaders = this._requestHeaders;
-
-                LastCallRequestHeaders = reqHeaders;
-
-                // Headers of the request
-                if (reqHeaders != null)
-                    foreach (var h in reqHeaders)
+                    // Content of the request
+                    if (jsonBody != null)
                     {
-                        request.Headers.Add(h.Key, h.Value);
+                        request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                     }
 
-                // Handler
-                try
-                {
-                    using var handler = new HttpClientHandler();
-                    using var client = new HttpClient(handler);
-                    using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
+                    // These are the headers we'll use in the request 
+                    Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
 
-                    var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        if (typeof(T) == typeof(string))
-                            result = (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
-                        else
-                            result = JsonConvert.DeserializeObject<T>(content);
-                    }
+                    // Merge single use headers with actual headers
+                    if (singleUseHeaders != null)
+                        reqHeaders = this._requestHeaders.Concat(singleUseHeaders)
+                                                         .ToLookup(x => x.Key, x => x.Value)
+                                                         .ToDictionary(x => x.Key, g => g.First());
                     else
+                        reqHeaders = this._requestHeaders;
+
+                    LastCallRequestHeaders = reqHeaders;
+
+                    // Headers of the request
+                    if (reqHeaders != null)
+                        foreach (var h in reqHeaders)
+                        {
+                            request.Headers.Add(h.Key, h.Value);
+                        }
+
+                    // Handler
+                    try
                     {
-                        if (callbackError != null)
+                        using var handler = new HttpClientHandler();
+                        using var client = new HttpClient(handler);
+                        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
+
+                        var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            if (typeof(T) == typeof(string))
+                                result = (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
+                            else
+                                result = JsonConvert.DeserializeObject<T>(content);
+                        }
+                        else
+                        {
                             // Run the callback
-                            callbackError(response.StatusCode);
+                            callbackError?.Invoke(new HttpListenerException(Convert.ToInt16(response.StatusCode)));
 
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("[Issue Handler]: " + ex.Message);
+                    catch (Exception ex)
+                    {
+                        throw new Exception("[Issue Handler]: " + ex.Message);
+                    }
+
                 }
 
+                return result;
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                callbackError(ex);
+                throw ex ;
+            }
+            
 
 
         }
@@ -260,79 +269,88 @@ namespace CustardApi.Objects
         /// <param name="headers"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a string</returns>
-        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?, IDictionary<string, string>> callbackError = null, IDictionary<string, string> headers = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpStatusCode?, Exception> callbackError = null, IDictionary<string, string> headers = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            string result = string.Empty;
-
-            // Build the url
-            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? string.Empty : "/" + action);
-
-            // If there are some parameters
-            methodUrl = CreateUrl(parameters, methodUrl);
-
-            Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
-
-            // Merge single use headers with actual headers
-            if (singleUseHeaders != null)
-                reqHeaders = this._requestHeaders.Concat(singleUseHeaders)
-                                                 .ToLookup(x => x.Key, x => x.Value)
-                                                 .ToDictionary(x => x.Key, g => g.First());
-            else
-                reqHeaders = this._requestHeaders;
-
-            
-
-            // Build the request
-            using (var request = new HttpRequestMessage(httpMethod, methodUrl))
+            try
             {
-                // Content of the request
-                if (jsonBody != null)
-                {
-                    request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                }
-                // Headers of the request
+                string result = string.Empty;
 
-                // Headers of the request
-                if (singleUseHeaders == null && this._requestHeaders != null)
+                // Build the url
+                string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? string.Empty : "/" + action);
+
+                // If there are some parameters
+                methodUrl = CreateUrl(parameters, methodUrl);
+
+                Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
+
+                // Merge single use headers with actual headers
+                if (singleUseHeaders != null)
+                    reqHeaders = this._requestHeaders.Concat(singleUseHeaders)
+                                                     .ToLookup(x => x.Key, x => x.Value)
+                                                     .ToDictionary(x => x.Key, g => g.First());
+                else
+                    reqHeaders = this._requestHeaders;
+
+
+
+                // Build the request
+                using (var request = new HttpRequestMessage(httpMethod, methodUrl))
                 {
-                    foreach (var h in this._requestHeaders)
+                    // Content of the request
+                    if (jsonBody != null)
                     {
-
-                        request.Headers.Add(h.Key, h.Value);
+                        request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
                     }
-                }
-                else if (reqHeaders != null)
-                {
-                    foreach (var h in reqHeaders)
+                    // Headers of the request
+
+                    // Headers of the request
+                    if (singleUseHeaders == null && this._requestHeaders != null)
                     {
-                        request.Headers.Add(h.Key, h.Value);
-                    }
-                }
-                // Handler
-                try
-                {
-                    using var handler = new HttpClientHandler();
-                    using var client = new HttpClient(handler);
-                    using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
+                        foreach (var h in this._requestHeaders)
+                        {
 
-                    if (response.IsSuccessStatusCode)
+                            request.Headers.Add(h.Key, h.Value);
+                        }
+                    }
+                    else if (reqHeaders != null)
                     {
-
-                        // Set the result from the response
-                        result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+                        foreach (var h in reqHeaders)
+                        {
+                            request.Headers.Add(h.Key, h.Value);
+                        }
                     }
-                    else
-                        // Run the callback
-                        callbackError(response.StatusCode, headers);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("[Issue Handler]: " + ex.Message);
+                    // Handler
+                    try
+                    {
+                        using var handler = new HttpClientHandler();
+                        using var client = new HttpClient(handler);
+                        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+
+                            // Set the result from the response
+                            result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
+                        }
+                        else
+                            // Run the callback
+                            callbackError(response.StatusCode, new Exception("Invallid"));
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("[Issue Handler]: " + ex.Message);
+                    }
+
                 }
 
+                return result;
             }
-
-            return result;
+            catch (Exception ex)
+            {
+                callbackError(0, ex);
+                throw ex;
+            }
+            
         }
         /// <summary>
         ///  Method to create a url with the given parameters

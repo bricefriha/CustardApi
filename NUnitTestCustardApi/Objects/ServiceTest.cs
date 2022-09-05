@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Reflection.PortableExecutable;
+using Newtonsoft.Json;
 
 namespace NUnitTestCustardApi
 {
@@ -359,14 +361,19 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            await _service.Get("errorTest", callbackError: (code) => {
-                actualCode = code;
+            await _service.Get<Collection<Conference>>("errorTest", callbackError: (code) => {
+                //actualCode = (code as HttpListenerException).ErrorCode;
             });
 
             _service.Dispose();
 
             // Assert
             Assert.AreEqual(expectationCode, actualCode);
+        }
+        // Test Callback with  http code status parameter
+        [Test]
+        public async Task MethodTest()
+        {
         }
     }
 }
