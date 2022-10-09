@@ -262,98 +262,6 @@ namespace CustardApi.Objects
 
         }
         /// <summary>
-        /// Get get a string response
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="jsonBody"></param>
-        /// <param name="action"></param>
-        /// <param name="headers"></param>
-        /// <param name="httpMethod"></param>
-        /// <returns>response of the method in the form of a string</returns>
-        private async Task<string> Process(string controller, string jsonBody, string action, string[] parameters,string contentType, HttpMethod httpMethod, Action<HttpStatusCode?, Exception> callbackError = null, IDictionary<string, string> headers = null, IDictionary<string, string> singleUseHeaders = null)
-        {
-            try
-            {
-                string result = string.Empty;
-
-                // Build the url
-                string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? string.Empty : "/" + action);
-
-                // If there are some parameters
-                methodUrl = CreateUrl(parameters, methodUrl);
-
-                Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
-
-                // Merge single use headers with actual headers
-                if (singleUseHeaders != null)
-                    reqHeaders = this._requestHeaders.Concat(singleUseHeaders)
-                                                     .ToLookup(x => x.Key, x => x.Value)
-                                                     .ToDictionary(x => x.Key, g => g.First());
-                else
-                    reqHeaders = this._requestHeaders;
-
-
-
-                // Build the request
-                using (var request = new HttpRequestMessage(httpMethod, methodUrl))
-                {
-                    // Content of the request
-                    if (jsonBody != null)
-                    {
-                        request.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                    }
-                    // Headers of the request
-
-                    // Headers of the request
-                    if (singleUseHeaders == null && this._requestHeaders != null)
-                    {
-                        foreach (var h in this._requestHeaders)
-                        {
-
-                            request.Headers.Add(h.Key, h.Value);
-                        }
-                    }
-                    else if (reqHeaders != null)
-                    {
-                        foreach (var h in reqHeaders)
-                        {
-                            request.Headers.Add(h.Key, h.Value);
-                        }
-                    }
-                    // Handler
-                    try
-                    {
-                        using var handler = new HttpClientHandler();
-                        using var client = new HttpClient(handler);
-                        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-
-                            // Set the result from the response
-                            result = response.Content == null ? null : await response.Content.ReadAsStringAsync();
-                        }
-                        else
-                            // Run the callback
-                            callbackError(response.StatusCode, new Exception("Invallid"));
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("[Issue Handler]: " + ex.Message);
-                    }
-
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                callbackError(0, ex);
-                throw ex;
-            }
-            
-        }
-        /// <summary>
         ///  Method to create a url with the given parameters
         /// </summary>
         /// <param name="parameters">List of parameters</param>
@@ -390,7 +298,7 @@ namespace CustardApi.Objects
         public async Task<T> ExecutePost<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Post, headers: headers);
+            return await Process<T>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Post, headers: headers);
         }
 
         /// <summary>
@@ -405,7 +313,7 @@ namespace CustardApi.Objects
         public async Task<T> ExecuteGet<T>(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers);
+            return await Process<T>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Get, headers: headers);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -420,7 +328,7 @@ namespace CustardApi.Objects
         {
 
 
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Put, headers: headers);
+            return await Process<T>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Put, headers: headers);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -435,7 +343,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return await Process<T>(controller, jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
+            return await Process<T>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
         }
         /// <summary>
         /// Execute a post method without header and return a string
@@ -449,7 +357,7 @@ namespace CustardApi.Objects
         public async Task<string> ExecutePost(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null)
         {
 
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Post, headers: headers);
+            return await Process<string>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Post, headers: headers);
         }
 
         /// <summary>
@@ -463,7 +371,7 @@ namespace CustardApi.Objects
         public async Task<string> ExecuteGet(string controller, string action = null, IDictionary<string, string> headers = null, string jsonBody = null, string[] parameters = null, Action<HttpStatusCode?> callbackError = null)
         {
 
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Get, headers: headers);
+            return await Process<string>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Get, headers: headers);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -478,7 +386,7 @@ namespace CustardApi.Objects
         {
 
 
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Put, headers: headers);
+            return await Process<string>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Put, headers: headers);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -493,7 +401,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return await Process(controller, jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
+            return await Process<string>(controller, contentType: "application/json", jsonBody, action, parameters, HttpMethod.Delete, headers: headers);
         }
 
 
