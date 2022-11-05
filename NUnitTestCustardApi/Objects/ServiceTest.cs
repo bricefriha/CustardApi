@@ -374,6 +374,8 @@ namespace NUnitTestCustardApi
         [Test]
         public async Task MethodTest()
         {
+            var serv = new Service("http://racevoice.com/downloads", sslCertificate: false);
+            Console.WriteLine(await serv.Get("tracks.php"));
         }
     }
 }
