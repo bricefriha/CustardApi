@@ -105,7 +105,7 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            User actualResult = await _service.Post<User>( "users", "authenticate", jsonBody: body);
+            User actualResult = await _service.Post<User>( "users", jsonBody: body, "authenticate");
 
             _service.Dispose();
 
@@ -274,7 +274,7 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            string actualResult = await _service.Post( "users", "authenticate", jsonBody: body);
+            string actualResult = await _service.Post( "users", jsonBody: body, "authenticate");
 
             _service.Dispose();
 
@@ -312,7 +312,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            string actualResult = await _service.Put ("todolists", "rename", jsonBody: body, parameters: parameters);
+            string actualResult = await _service.Put ("todolists", jsonBody: body, "rename", parameters: parameters);
 
             _service.Dispose();
             // Assert
