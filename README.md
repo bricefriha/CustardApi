@@ -28,8 +28,7 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 ```
 - ### Create headers
 ```C#
-IDictionary<string, string> headers = new Dictionary<string, string>();
-headers.Add("Hearder", "Value "); // Do this for every headers
+yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
 ```
 - ### Call a POST method
 
