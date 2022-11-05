@@ -61,7 +61,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public  Task<T> Post<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public  Task<T> Post<T>(string controller, string jsonBody, string action = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             return Process<T>(controller, contentType, jsonBody, action, parameters, HttpMethod.Post, callbackError, singleUseHeaders: singleUseHeaders);
@@ -76,7 +76,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Get<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<T> Get<T>(string controller, string jsonBody, string action = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             return Process<T>(controller, contentType, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
@@ -90,7 +90,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Put<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<T> Put<T>(string controller, string jsonBody, string action = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
 
@@ -105,7 +105,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<T> Delete<T>(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<T> Delete<T>(string controller, string jsonBody, string action = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             // Get the reponse
@@ -121,7 +121,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Get(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<string> Get(string controller, string jsonBody, string action = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             return Process<string>(controller, contentType, jsonBody, action, parameters, HttpMethod.Get, callbackError, singleUseHeaders: singleUseHeaders);
@@ -135,7 +135,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Put(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<string> Put(string controller, string action = null, string jsonBody, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
             return Process<string>(controller, contentType, jsonBody, action, parameters, HttpMethod.Put, callbackError, singleUseHeaders: singleUseHeaders);
         }
@@ -148,7 +148,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Post(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<string> Post(string controller, string action = null, string jsonBody, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             // Get the reponse
@@ -163,7 +163,7 @@ namespace CustardApi.Objects
         /// <param name="jsonBody">body in json</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <returns></returns>
-        public Task<string> Delete(string controller, string action = null, string jsonBody = null, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
+        public Task<string> Delete(string controller, string action = null, string jsonBody, string[] parameters = null, Action<Exception> callbackError = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
             // Get the reponse

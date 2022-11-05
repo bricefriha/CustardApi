@@ -339,43 +339,13 @@ namespace NUnitTestCustardApi
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.Delete ("todolists", parameters: parameters);
+            string actualResult = await _service.Delete("todolists", jsonBody: null, parameters: parameters) ;
 
             _service.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
-        }
-        // Test Callback with  http code status parameter
-        [Test]
-        public async Task MethodWithCallback()
-        {
-            // Arrange
-            HttpStatusCode? expectationCode = HttpStatusCode.NotFound;
-            HttpStatusCode? actualCode = HttpStatusCode.OK;
-
-            IDictionary<string, string> headers = new Dictionary<string, string>();
-
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
-
-
-            // Act
-            await _service.Get<Collection<Conference>>("errorTest", callbackError: (code) => {
-                //actualCode = (code as HttpListenerException).ErrorCode;
-            });
-
-            _service.Dispose();
-
-            // Assert
-            Assert.AreEqual(expectationCode, actualCode);
-        }
-        // Test Callback with  http code status parameter
-        [Test]
-        public async Task MethodTest()
-        {
-            var serv = new Service("http://racevoice.com/downloads", sslCertificate: false);
-            Console.WriteLine(await serv.Get("tracks.php"));
         }
     }
 }
