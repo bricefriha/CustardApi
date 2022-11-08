@@ -108,7 +108,7 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
-  var actualResult = await _service.ExecuteGet("todolists", headers: headers, callbackError: (code) => 
+  var actualResult = await _service.Get("todolists", headers: headers, callbackError: (code) => 
             {
                 switch (code):
                           case HttpStatusCode.NotFound: 
