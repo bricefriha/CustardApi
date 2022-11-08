@@ -14,11 +14,11 @@ Custard is a .NET standard plugin to intuitively call web APIs. 😁
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.1.6
+  Install-Package Custard -Version 0.2.7
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.1.6
+  dotnet add package Custard --version 0.2.7
   ```
 ## Custard.Service
 - ### Instantiate a service object:
