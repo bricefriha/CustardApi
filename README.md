@@ -28,7 +28,7 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 ```
 - ### Create headers
 ```C#
-yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
+yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every headers
 ```
 - ### Call a POST method
 
@@ -46,11 +46,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePost (controller, action, headers, jsonBody, parameters);
+    yourService.Post (controller, action, headers, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Post<T> (controller, action, headers, jsonBody, parameters);
     ```
 - ### Call a PUT method
 
@@ -68,11 +68,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePut (controller, action, headers, jsonBody, parameters);
+    yourService.Put (controller, action, headers, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Put<T> (controller, action, headers, jsonBody, parameters);
     ```
 
 - ### Call a GET method
@@ -91,11 +91,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
   ```C#
-  yourService.ExecuteGet (controller, action, headers, jsonBody, parameters);
+  yourService.Get (controller, action, headers, jsonBody, parameters);
   ```
   - To return a model (T is the model):
   ```C#
-  yourService.ExecuteGet<T> (controller, action, headers, jsonBody, parameters);
+  yourService.Get<T> (controller, action, headers, jsonBody, parameters);
   ```
 
 
