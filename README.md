@@ -14,11 +14,11 @@ Custard is a .NET standard plugin to intuitively call web APIs. 😁
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.1.6
+  Install-Package Custard -Version 0.2.7
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.1.6
+  dotnet add package Custard --version 0.2.7
   ```
 ## Custard.Service
 - ### Instantiate a service object:
@@ -28,7 +28,7 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 ```
 - ### Create headers
 ```C#
-yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
+yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every headers
 ```
 - ### Call a POST method
 
@@ -46,11 +46,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePost (controller, action, headers, jsonBody, parameters);
+    yourService.Post (controller, action, headers, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePost<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Post<T> (controller, action, headers, jsonBody, parameters);
     ```
 - ### Call a PUT method
 
@@ -68,11 +68,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
     ```C#
-    yourService.ExecutePut (controller, action, headers, jsonBody, parameters);
+    yourService.Put (controller, action, headers, jsonBody, parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.ExecutePut<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Put<T> (controller, action, headers, jsonBody, parameters);
     ```
 
 - ### Call a GET method
@@ -91,11 +91,11 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   **Usage**:
   - To return a string:
   ```C#
-  yourService.ExecuteGet (controller, action, headers, jsonBody, parameters);
+  yourService.Get (controller, action, headers, jsonBody, parameters);
   ```
   - To return a model (T is the model):
   ```C#
-  yourService.ExecuteGet<T> (controller, action, headers, jsonBody, parameters);
+  yourService.Get<T> (controller, action, headers, jsonBody, parameters);
   ```
 
 
@@ -108,7 +108,7 @@ yourService.RequestHeaders.Add"Hearder", "Value "); // Do this for every headers
   If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
-  var actualResult = await _service.ExecuteGet("todolists", headers: headers, callbackError: (code) => 
+  var actualResult = await yourService.Get("todolists", headers: headers, callbackError: (code) => 
             {
                 switch (code):
                           case HttpStatusCode.NotFound: 
