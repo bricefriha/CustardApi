@@ -557,19 +557,19 @@ namespace CustardApi.Objects
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller"></param>
-        /// <param name="jsonBody"></param>
+        /// <param name="payload">string payload</param>
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string jsonBody, string action, string[] parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, string[] parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
                 // Build the request
-                return await ProcessRequest<T>(contentType, jsonBody, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
+                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
             }
             catch (Exception ex)
             {
@@ -607,19 +607,19 @@ namespace CustardApi.Objects
         /// </summary>
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller"></param>
-        /// <param name="jsonBody"></param>
+        /// <param name="payload">string payload</param>
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string jsonBody, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
                 // Build the request
-                return await ProcessRequest<T>(contentType, jsonBody, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
+                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
             }
             catch (Exception ex)
             {
