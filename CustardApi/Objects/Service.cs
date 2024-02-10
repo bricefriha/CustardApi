@@ -1,8 +1,10 @@
 ﻿
+using CustardApi.Tools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -472,7 +474,7 @@ namespace CustardApi.Objects
 
         }
         /// <summary>
-        ///  Method to create a url with the given parameters
+        ///  Method to create a url with the given path parameters
         /// </summary>
         /// <param name="parameters">List of parameters</param>
         /// <param name="initialUrl">The base url</param>
@@ -481,13 +483,23 @@ namespace CustardApi.Objects
         {
             if (parameters != null)
             {
-                // For each parameters
-                foreach (string parameter in parameters)
-                {
-                    // Add the parameter to the url
-                    initialUrl += $"/{parameter}";
+                initialUrl = UrlTool.BuildPathUrl(parameters, initialUrl);
+            }
 
-                }
+            return initialUrl;
+        }
+
+        /// <summary>
+        ///  Method to create a url with the given query parameters
+        /// </summary>
+        /// <param name="parameters">List of parameters</param>
+        /// <param name="initialUrl">The base url</param>
+        /// <returns>The url with all the parameters</returns>
+        private static string CreateUrl(Dictionary<string,string> parameters, string initialUrl)
+        {
+            if (parameters != null)
+            {
+                initialUrl = UrlTool.BuildQueryUrl(parameters, initialUrl);
             }
 
             return initialUrl;
