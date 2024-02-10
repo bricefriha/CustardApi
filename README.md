@@ -6,7 +6,7 @@
 # What's Custard? 
 [![NuGet](https://img.shields.io/nuget/v/Custard.svg?style=flat)](https://www.nuget.org/packages/Custard/)
 
-Custard is a .NET standard plugin to intuitively call web APIs. 😁
+Custard is a .NET standard plugin to call web APIs intuitively. 😁
 
 
 
@@ -14,11 +14,11 @@ Custard is a .NET standard plugin to intuitively call web APIs. 😁
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.2.7
+  Install-Package Custard -Version 0.3.2
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.2.7
+  dotnet add package Custard --version 0.3.2
   ```
 ## Custard.Service
 - ### Instantiate a service object:
@@ -99,13 +99,13 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   ```
 
 
-> ⚠ If you want to return a model the Http response body has to be in JSON format
+> ⚠ If you want to return a model the HTTP response body has to be in JSON format
 
 
-  **I didn't finish the documentation, that why it's so ugly. Sorry about that 😁**
+  **I didn't finish the documentation, that's why it's so ugly. Sorry about that 😁**
 
 - ### Callback Error
-  If needed you can even add a callback in case the request face an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
+  If needed, you can add a callback if the request faces an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
   var actualResult = await yourService.Get("todolists", headers: headers, callbackError: (code) => 
