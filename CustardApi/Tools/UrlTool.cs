@@ -27,7 +27,7 @@ namespace CustardApi.Tools
         /// <param name="parameters">parameters you want in the URL</param>
         /// <param name="initialUrl">url you already have</param>
         /// <returns>new url with all the parameters</returns>
-        public static string BuildQueryUrl(Dictionary<string, string> parameters, string initialUrl)
+        public static string BuildQueryUrl(IDictionary<string, string> parameters, string initialUrl)
         {
             // Add the initiator
             initialUrl += "?";
