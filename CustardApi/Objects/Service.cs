@@ -1468,16 +1468,19 @@ namespace CustardApi.Objects
         /// <returns>Full url of the request</returns>
         private string BuildUrl(string controller, string action, string[] parameters= null)
         {
-            if (parameters == null)
-                return _baseUrl + controller;
 
             // Build the url
-            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+            string methodUrl = GetBaseMethodUrl(controller, action);
+
+            if (parameters == null)
+                return methodUrl;
+
 
             // If there are some parameters
             LastCall = methodUrl = CreateUrl(parameters, methodUrl);
             return methodUrl;
         }
+
         /// <summary>
         /// Build a complete url with all the data needed for query parameters
         /// </summary>
@@ -1488,11 +1491,21 @@ namespace CustardApi.Objects
         private string BuildUrl(string controller, string action, IDictionary<string, string> parameters)
         {
             // Build the url
-            string methodUrl = _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
+            string methodUrl = GetBaseMethodUrl(controller, action);
 
             // If there are some parameters
             LastCall = methodUrl = CreateUrl(parameters, methodUrl);
             return methodUrl;
+        }
+        /// <summary>
+        /// Get url from controller and action
+        /// </summary>
+        /// <param name="controller">controller of the method</param>
+        /// <param name="action">action of the met</param>
+        /// <returns></returns>
+        private string GetBaseMethodUrl(string controller, string action)
+        {
+            return _baseUrl + controller + (string.IsNullOrEmpty(action) ? "" : "/" + action);
         }
 
         /// <summary>

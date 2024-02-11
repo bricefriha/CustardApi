@@ -19,13 +19,15 @@ namespace NUnitTestCustardApi
         private static Service _service;
         private Service _serviceRick;
         private Service _serviceWord;
+        private Service _serviceReqres;
 
         [SetUp]
         public void Setup()
         {
             _service = new Service("api.gamhub.io", sslCertificate: true);
-            _serviceRick = new Service("rickandmortyapi.com/api", sslCertificate: true);
+            _serviceRick = new Service("rickandmortyapi.com", sslCertificate: true);
             _serviceWord = new Service("random-word-api.herokuapp.com", sslCertificate: true);
+            _serviceReqres = new Service("reqres.in", sslCertificate: true);
         }
 
         // Construtor
@@ -352,8 +354,8 @@ namespace NUnitTestCustardApi
             // Arrange
             string language = "en";
             int wordLength = 5;
+            string controller = "word";
 
-            string action = "word";
             Dictionary<string, string> parameters = new Dictionary<string, string>
             {
                 { "length", $"{wordLength}" },
@@ -361,13 +363,54 @@ namespace NUnitTestCustardApi
             };
 
             // Act
-            string result = await _serviceWord.Get(action,jsonBody: null, parameters: parameters);
+            string result = await _serviceWord.Get(controller, jsonBody: null, parameters: parameters);
 
 
             // Assert
             Console.WriteLine(result);
             Assert.IsTrue(!string.IsNullOrEmpty(result));
 
+        }
+        [Test]
+        public async Task GetMethodWithPathParameters()
+        {
+            // Arrage
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+           
+
+            // Act
+            var resultStr = await _serviceReqres.Get(controller: controller, action: action,parameters: param);
+            // Assert
+            Console.WriteLine(_serviceReqres.LastCall);
+            Assert.IsNotNull(resultStr);
+        }
+        [Test]
+        public async Task PostMethod()
+        {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+
+            // Act
+            var result = await _serviceReqres.Post<ReqresUser>(controller: controller, action: action, jsonBody: JsonConvert.SerializeObject(userToCreate) );
+            
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task PutMethodWithPathParameters()
+        {
+            // Arrage
+            // Act
+            // Assert
         }
     }
 }
