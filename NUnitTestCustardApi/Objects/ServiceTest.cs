@@ -408,6 +408,26 @@ namespace NUnitTestCustardApi
         [Test]
         public async Task PutMethodWithPathParameters()
         {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+
+            // Act
+            var result = await _serviceReqres.Put<ReqresUser>(controller: controller, action: action, jsonBody: JsonConvert.SerializeObject(userToCreate), parameters: param );
+            
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task DeleteMethodWithPathParameters()
+        {
             // Arrage
             // Act
             // Assert
