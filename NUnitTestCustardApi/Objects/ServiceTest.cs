@@ -429,8 +429,19 @@ namespace NUnitTestCustardApi
         public async Task DeleteMethodWithPathParameters()
         {
             // Arrage
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+
             // Act
+            var result = await _serviceReqres.Delete(controller: controller, action: action, parameters: param, unSuccessCallback: (err) =>
+            {
+                Assert.Fail(err.ReasonPhrase);
+            });
+
             // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
         }
     }
 }
