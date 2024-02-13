@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,25 +10,26 @@ using System.Collections.ObjectModel;
 using System.Net;
 using System.Reflection.PortableExecutable;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace NUnitTestCustardApi
 {
     class ServiceTest
     {
         private static Service _service;
+        private Service _serviceRick;
+        private Service _serviceWord;
+        private Service _serviceReqres;
 
         [SetUp]
         public void Setup()
         {
-            _service = new Service("api.gamhub.io", sslCertificate: true) ;
+            _service = new Service("api.gamhub.io", sslCertificate: true);
+            _serviceRick = new Service("rickandmortyapi.com", sslCertificate: true);
+            _serviceWord = new Service("random-word-api.herokuapp.com", sslCertificate: true);
+            _serviceReqres = new Service("reqres.in", sslCertificate: true);
         }
-        [Test]
-        public async Task LotusAiLogin()
-        {
-            //string body = $"{{ \"email\": \"{ _email}\", \"password\": \"{ _password }\" }}";
-            await _service.Post(action: "authenticate", controller: "authenticateuserbyemail", jsonBody: "{ \"email\": \"jason+mobiletest1@lotusai.co\", \"password\": \"u1oX9es6IOIf\" }");
-            Assert.Pass();
-        }
+
         // Construtor
         //
         // Without SSL certificate
@@ -82,7 +83,7 @@ namespace NUnitTestCustardApi
             Service constructorNonSSl;
 
             // Act
-            constructorNonSSl = new Service("localhost",2020);
+            constructorNonSSl = new Service("localhost", 2020);
 
             // Assert
             Assert.AreEqual("http://localhost:2020/", constructorNonSSl.BaseUrl);
@@ -105,7 +106,7 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            User actualResult = await _service.Post<User>( "users", jsonBody: body, "authenticate");
+            User actualResult = await _service.Post<User>("users", jsonBody: body, "authenticate");
 
             _service.Dispose();
 
@@ -152,12 +153,12 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds");
+            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds", jsonBody: null);
 
             _service.Dispose();
 
             // Assert
-            Assert.Greater(actualResult?.Count,0 );
+            Assert.Greater(actualResult?.Count, 0);
         }
         // Post Method
         // With a body a token but no params 
@@ -199,7 +200,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists");
+            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists", jsonBody: null);
 
             _service.Dispose();
 
@@ -213,8 +214,8 @@ namespace NUnitTestCustardApi
             // Arrange
             Todolist Expectation = new Todolist
             {
-                    Title = "Unit test",
-                    User = "5ee24ee3796d9519fcc1b25d"
+                Title = "Unit test",
+                User = "5ee24ee3796d9519fcc1b25d"
             };
 
             string body = "{ \"title\": \"Workout\" }";
@@ -225,7 +226,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Todolist actualResult = await _service.Put<Todolist>("todolists", "rename", body, parameters);
+            Todolist actualResult = await _service.Put<Todolist>("todolists", "rename", parameters, body );
 
             _service.Dispose();
 
@@ -250,13 +251,13 @@ namespace NUnitTestCustardApi
             ///
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
-            Todolist itemToDelete = await _service.Post<Todolist>("todolists", "create", body);
+            Todolist itemToDelete = await _service.Post<Todolist>("todolists", body, "create");
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            DeleteCode actualResult = await _service.Delete<DeleteCode>("todolists", parameters: parameters);
+            DeleteCode actualResult = await _service.Delete<DeleteCode>(controller:"todolists", parameters: parameters);
 
             _service.Dispose();
 
@@ -274,7 +275,7 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            string actualResult = await _service.Post( "users", jsonBody: body, "authenticate");
+            string actualResult = await _service.Post("users", body, "authenticate",(e) => { });
 
             _service.Dispose();
 
@@ -292,7 +293,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            string actualResult = await _service.Get ( "todolists");
+            string actualResult = await _service.Get("todolists", jsonBody: null);
 
             _service.Dispose();
             // Assert
@@ -312,7 +313,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            string actualResult = await _service.Put ("todolists", jsonBody: body, "rename", parameters: parameters);
+            string actualResult = await _service.Put("todolists", "rename", parameters, body);
 
             _service.Dispose();
             // Assert
@@ -332,20 +333,115 @@ namespace NUnitTestCustardApi
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
 
-            Todolist itemToDelete = await _service.Post<Todolist>("todolists", "create", body);
+            Todolist itemToDelete = await _service.Post<Todolist>("todolists", body, "create");
 
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.Delete("todolists", jsonBody: null, parameters: parameters) ;
+            string actualResult = await _service.Delete("todolists", jsonBody: null, parameters: parameters);
 
             _service.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
+        }
+        [Test]
+        public async Task GetMethodWithQueryParameters()
+        {
+            // Arrange
+            string language = "en";
+            int wordLength = 5;
+            string controller = "word";
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "length", $"{wordLength}" },
+                { "lang", language }
+            };
+
+            // Act
+            string result = await _serviceWord.Get(controller, jsonBody: null, parameters: parameters);
+
+
+            // Assert
+            Console.WriteLine(result);
+            Assert.IsTrue(!string.IsNullOrEmpty(result));
+
+        }
+        [Test]
+        public async Task GetMethodWithPathParameters()
+        {
+            // Arrage
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+           
+
+            // Act
+            var resultStr = await _serviceReqres.Get(controller: controller, action: action,parameters: param);
+            // Assert
+            Console.WriteLine(_serviceReqres.LastCall);
+            Assert.IsNotNull(resultStr);
+        }
+        [Test]
+        public async Task PostMethod()
+        {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+
+            // Act
+            var result = await _serviceReqres.Post<ReqresUser>(controller: controller, action: action, jsonBody: JsonConvert.SerializeObject(userToCreate) );
+            
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task PutMethodWithPathParameters()
+        {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+
+            // Act
+            var result = await _serviceReqres.Put<ReqresUser>(controller: controller, action: action, jsonBody: JsonConvert.SerializeObject(userToCreate), parameters: param );
+            
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task DeleteMethodWithPathParameters()
+        {
+            // Arrage
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+
+            // Act
+            var result = await _serviceReqres.Delete(controller: controller, action: action, parameters: param, unSuccessCallback: (err) =>
+            {
+                Assert.Fail(err.ReasonPhrase);
+            });
+
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
         }
     }
 }
