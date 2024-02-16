@@ -37,11 +37,11 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
 
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
-  |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[] / IDictonary<string,string>   |   ❌  |
+  |  *controller* | `string`   | ✔    |
+  |  *action* | `string`   |  ❌   |
+  |  *headers* | `IDictionary<string, string>`   |  ❌  |
+  |  *jsonBody* | `string`   |   ❌  |
+  |  *parameters* | `string[] / IDictonary<string,string>`   |   ❌  |
 
 
   **Usage**:
@@ -63,7 +63,7 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   |  *action* | `string`   |  ❌   |
   |  *headers* | `IDictionary<string, string>`   |  ❌  |
   |  *jsonBody* | `string`   |   ❌  |
-  |  *parameters* | `string[]` / IDictonary<string,string>   |   ❌  |
+  |  *parameters* | `string[] / IDictonary<string,string>`   |   ❌  |
 
 
   **Usage**:
@@ -82,11 +82,11 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
 
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
-  |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[] / IDictonary<string,string>   |   ❌  |
+  |  *controller* | `string`   | ✔    |
+  |  *action* | `string`   |  ❌   |
+  |  *headers* | `IDictionary<string, string>`   |  ❌  |
+  |  *jsonBody* | `string`   |   ❌  |
+  |  *parameters* | `string[] / IDictonary<string,string>`   |   ❌  |
 
 
   **Usage**:
