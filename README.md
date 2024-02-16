@@ -8,7 +8,9 @@
 
 Custard is a .NET standard plugin to call web APIs intuitively. 😁
 
-
+Fully compatible with:
+- **.NET MAUI**
+- **Xamarin Forms**
 
 # Documentation 📄
 ## Installation
