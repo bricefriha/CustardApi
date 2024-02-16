@@ -14,11 +14,11 @@ Custard is a .NET standard plugin to call web APIs intuitively. 😁
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.3.2
+  Install-Package Custard -Version 0.3.3
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.3.2
+  dotnet add package Custard --version 0.3.3
   ```
 ## Custard.Service
 - ### Instantiate a service object:
@@ -30,6 +30,7 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 ```C#
 yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every headers
 ```
+
 - ### Call a POST method
 
   **Parameters**:
@@ -40,7 +41,7 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   |  *action* | string   |  ❌   |
   |  *headers* | IDictionary<string, string>   |  ❌  |
   |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *parameters* | string[] / IDictonary<string,string>   |   ❌  |
 
 
   **Usage**:
@@ -58,11 +59,11 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
 
   | Name      | Type     | Required     |
   | :------------- | :----------: | -----------: |
-  |  *controller* | string   | ✔    |
-  |  *action* | string   |  ❌   |
-  |  *headers* | IDictionary<string, string>   |  ❌  |
-  |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *controller* | `string`   | ✔    |
+  |  *action* | `string`   |  ❌   |
+  |  *headers* | `IDictionary<string, string>`   |  ❌  |
+  |  *jsonBody* | `string`   |   ❌  |
+  |  *parameters* | `string[]` / IDictonary<string,string>   |   ❌  |
 
 
   **Usage**:
@@ -85,7 +86,7 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   |  *action* | string   |  ❌   |
   |  *headers* | IDictionary<string, string>   |  ❌  |
   |  *jsonBody* | string   |   ❌  |
-  |  *parameters* | string[]   |   ❌  |
+  |  *parameters* | string[] / IDictonary<string,string>   |   ❌  |
 
 
   **Usage**:
@@ -98,26 +99,52 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   yourService.Get<T> (controller, action, headers, jsonBody, parameters);
   ```
 
+## Passing Parameters to your requests
+Custard now supports two types of parameters:
+- Path parameters
+- Query parameters
 
-> ⚠ If you want to return a model the HTTP response body has to be in JSON format
+### Path parameters
+To pass path parameters to your requests, you have to pass them as `string[]`:
+
+**E.g**: for `/users/api/2/3/4` we would use:
+``` C#
+string action = "users";
+string controller = "api";
+string[] param = { "2", "3", "4" };
+           
+var resultStr = await yourService.Get(controller: controller, action: action, parameters: param);
+```
+### Path parameters
+To pass query parameters to your requests, you have to pass them as `Dictionary<string, string>`:
+
+**E.g**: for `/users/api?two=2&three=3&four=4` we would use:
+``` C#
+string action = "users";
+string controller = "api";
+
+Dictionary<string, string> param = new Dictionary<string, string>
+{
+    { "two", "2" },
+    { "three", "3" },
+    { "four", "4" }
+};
+           
+var resultStr = await yourService.Get(controller: controller, action: action, parameters: param);
+```
+
+> ⚠ If you want to return a model, the HTTP response body has to be in JSON format
 
 
-  **I didn't finish the documentation, that's why it's so ugly. Sorry about that 😁**
+  **I didn't finish the documentation. That's why it's so ugly. Sorry about that 😁**
 
 - ### Callback Error
   If needed, you can add a callback if the request faces an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
-  var actualResult = await yourService.Get("todolists", headers: headers, callbackError: (code) => 
+  var actualResult = await yourService.Get("todolists", headers: headers, callbackError: (err) => 
             {
-                switch (code):
-                          case HttpStatusCode.NotFound: 
-                                    // do something
-                                break;
-                           case HttpStatusCode.BadRequest: 
-                                    // do something else
-                                break;
-                          // .. etc
+                
             });
   ```
   - **code**: the error status code (HttpStatusCode).
