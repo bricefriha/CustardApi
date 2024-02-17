@@ -1409,7 +1409,7 @@ namespace CustardApi.Objects
                     unSuccessCallback?.Invoke(response);
 
                 if (typeof(T) == typeof(string))
-                    return (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
+                    return (T)(object)content;
                 else if (content != null)
                     return JsonConvert.DeserializeObject<T>(content);
                 else
@@ -1422,8 +1422,6 @@ namespace CustardApi.Objects
 
                 throw new Exception("[Issue Handler]: " + ex.Message);
             }
-
-            return result;
         }
 
 
