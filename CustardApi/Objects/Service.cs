@@ -1369,7 +1369,6 @@ namespace CustardApi.Objects
         /// <exception cref="Exception"></exception>
         private async Task<T> SendRequest<T>(Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, HttpRequestMessage request, CancellationToken cancToken)
         {
-            var result = default(T);
             // These are the headers we'll use in the request 
             Dictionary<string, string> reqHeaders = new Dictionary<string, string>();
 
