@@ -367,6 +367,7 @@ namespace NUnitTestCustardApi
 
 
             // Assert
+            Console.WriteLine(_serviceWord.LastCall);
             Console.WriteLine(result);
             Assert.IsTrue(!string.IsNullOrEmpty(result));
 
