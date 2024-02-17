@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CustardApi.Objects
@@ -20,6 +21,7 @@ namespace CustardApi.Objects
         private string _host;
         private int _port;
         private string _baseUrl;
+        private CancellationToken _defaultCancelationToken;
         private bool _sslCertificate;
         private string _lastController;
         private string _lastAction;
@@ -53,6 +55,8 @@ namespace CustardApi.Objects
 
             // Set the base url up then
             _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}";
+
+            _defaultCancelationToken = new CancellationToken();
         }
         #region Path parameters requests
         /// <summary>
@@ -68,7 +72,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, string jsonBody, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -84,7 +88,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, string jsonBody, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -100,7 +104,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -116,7 +120,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, string jsonBody, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -146,7 +150,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, string jsonBody, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -162,7 +166,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -178,7 +182,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -193,7 +197,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, HttpContent httpContent, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller,contentType, httpContent, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller,contentType, httpContent, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -209,7 +213,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, HttpContent httpContent, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -224,7 +228,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -239,7 +243,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -254,7 +258,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, HttpContent httpContent, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -267,7 +271,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, HttpContent httpContent, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -282,7 +286,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -298,7 +302,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         #endregion
@@ -317,7 +321,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, string jsonBody, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -333,7 +337,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, string jsonBody, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -349,7 +353,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -365,7 +369,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -381,7 +385,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, string jsonBody, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -395,7 +399,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, string jsonBody, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -411,7 +415,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -427,7 +431,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -442,7 +446,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, HttpContent httpContent, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -458,7 +462,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, HttpContent httpContent, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -473,7 +477,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -488,7 +492,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -503,7 +507,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, HttpContent httpContent, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -516,7 +520,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, HttpContent httpContent, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -531,7 +535,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -547,7 +551,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         #endregion
@@ -566,7 +570,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -582,7 +586,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -598,7 +602,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -614,7 +618,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -630,7 +634,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -644,7 +648,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -660,7 +664,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -676,7 +680,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method without header and return a model
@@ -691,7 +695,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -707,7 +711,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType,httpContent: httpContent, action, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -722,7 +726,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -737,7 +741,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, contentType, httpContent, action, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -752,7 +756,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
 
-            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -765,7 +769,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
         {
-            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -780,7 +784,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -796,7 +800,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, contentType, httpContent, action, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         #endregion
@@ -816,7 +820,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -831,7 +835,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -847,7 +851,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -862,7 +866,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -878,7 +882,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -892,7 +896,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, string[] parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -908,7 +912,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -924,7 +928,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         #endregion
@@ -943,7 +947,7 @@ namespace CustardApi.Objects
         public Task<T> Post<T>(string controller, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -959,7 +963,7 @@ namespace CustardApi.Objects
         public Task<T> Get<T>(string controller, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -975,7 +979,7 @@ namespace CustardApi.Objects
         {
 
 
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -990,7 +994,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<T>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         /// <summary>
@@ -1006,7 +1010,7 @@ namespace CustardApi.Objects
         public Task<string> Get(string controller, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
 
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Get, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a put method and return a model
@@ -1020,7 +1024,7 @@ namespace CustardApi.Objects
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller, IDictionary<string, string> parameters, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Put, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a post method and return a model
@@ -1036,7 +1040,7 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Post, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
         /// <summary>
         /// Execute a delete method and return a model
@@ -1052,259 +1056,11 @@ namespace CustardApi.Objects
         {
 
             // Get the reponse
-            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+            return Process<string>(controller, "application/json", payload: null, action, parameters, HttpMethod.Delete, _defaultCancelationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
 
         #endregion
 
-        #region without parameters
-        ///// <summary>
-        ///// Execute a post method without header and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// 
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Post<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-
-        ///// <summary>
-        ///// Execute a get method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Get<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a put method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Put<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-
-        //    return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a delete method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Delete<T>(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    // Get the reponse
-        //    return Process<T>(controller, "application/json", jsonBody, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-
-        ///// <summary>
-        ///// Execute a get method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Get(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a put method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Put(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-        //    return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a post method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Post(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    // Get the reponse
-        //    return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a delete method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Delete(string controller, string jsonBody, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
-        //{
-
-        //    // Get the reponse
-        //    return Process<string>(controller, "application/json", jsonBody, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a post method without header and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="httpContent">httpContent</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Post<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    return Process<T>(controller, contentType, httpContent, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-
-        ///// <summary>
-        ///// Execute a get method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="httpContent">httpContent</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Get<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    return Process<T>(controller, contentType, httpContent, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a put method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Put<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-
-        //    return Process<T>(controller, contentType, httpContent, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a delete method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<T> Delete<T>(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    // Get the reponse
-        //    return Process<T>(controller, contentType, httpContent, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-
-        ///// <summary>
-        ///// Execute a get method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Get(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    return Process<string>(controller, contentType, httpContent, action, HttpMethod.Get, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a put method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Put(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-        //    return Process<string>(controller, contentType, httpContent, action, HttpMethod.Put, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a post method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Post(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    // Get the reponse
-        //    return Process<string>(controller, contentType, httpContent, action, HttpMethod.Post, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-        ///// <summary>
-        ///// Execute a delete method and return a model
-        ///// </summary>
-        ///// <typeparam name="T">type of return</typeparam>
-        ///// <param name="controller">name of the controller</param>
-        ///// <param name="action">name of the action</param>
-        ///// <param name="jsonBody">body in json</param>
-        ///// <param name="singleUseHeaders">headers that will only be used in this request</param>
-        ///// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
-        ///// <returns>Result of the request</returns>
-        //public Task<string> Delete(string controller, HttpContent httpContent, string action = null, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null, string contentType = "application/json")
-        //{
-
-        //    // Get the reponse
-        //    return Process<string>(controller, contentType, httpContent, action, HttpMethod.Delete, unSuccessCallback, singleUseHeaders: singleUseHeaders);
-        //}
-
-        #endregion
         #endregion
 
         /// <summary>
@@ -1317,7 +1073,7 @@ namespace CustardApi.Objects
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
@@ -1325,7 +1081,7 @@ namespace CustardApi.Objects
                 string methodUrl = BuildUrl(controller, action);
 
                 // Build the request
-                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
+                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl, cancToken);
             }
             catch (Exception ex)
             {
@@ -1346,14 +1102,14 @@ namespace CustardApi.Objects
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, string[] parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, string[] parameters, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
                 // Build the request
-                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
+                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl, _defaultCancelationToken);
             }
             catch (Exception ex)
             {
@@ -1373,13 +1129,20 @@ namespace CustardApi.Objects
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, HttpContent httpContent, string action, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller,
+                                         string contentType,
+                                         HttpContent httpContent,
+                                         string action,
+                                         HttpMethod httpMethod,
+                                         CancellationToken cancToken,
+                                         Action<HttpResponseMessage> unSuccessCallback = null,
+                                         IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action);
 
-                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl);
+                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl, cancToken);
             }
             catch (Exception ex)
             {
@@ -1396,13 +1159,13 @@ namespace CustardApi.Objects
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, HttpContent httpContent, string action, string[] parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, HttpContent httpContent, string action, string[] parameters, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
-                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl);
+                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl, cancToken: cancToken);
             }
             catch (Exception ex)
             {
@@ -1419,14 +1182,14 @@ namespace CustardApi.Objects
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
                 // Build the request
-                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl);
+                return await ProcessRequest<T>(contentType, payload, httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders, methodUrl, cancToken);
             }
             catch (Exception ex)
             {
@@ -1446,13 +1209,21 @@ namespace CustardApi.Objects
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, HttpContent httpContent, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller,
+                                         string contentType,
+                                         HttpContent httpContent,
+                                         string action,
+                                         IDictionary<string, string> parameters,
+                                         HttpMethod httpMethod,
+                                         CancellationToken cancToken,
+                                         Action<HttpResponseMessage> unSuccessCallback = null,
+                                         IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
                 string methodUrl = BuildUrl(controller, action, parameters);
 
-                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl);
+                return await ProcessRequest<T>(contentType: contentType, httpContent: httpContent, httpMethod: httpMethod, unSuccessCallback: unSuccessCallback, singleUseHeaders: singleUseHeaders, methodUrl: methodUrl, cancToken: cancToken);
             }
             catch (Exception ex)
             {
@@ -1520,7 +1291,13 @@ namespace CustardApi.Objects
         /// <param name="methodUrl"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<T> ProcessRequest<T>(string contentType, string jsonBody, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, string methodUrl)
+        private async Task<T> ProcessRequest<T>(string contentType,
+                                                string jsonBody,
+                                                HttpMethod httpMethod,
+                                                Action<HttpResponseMessage> unSuccessCallback,
+                                                IDictionary<string, string> singleUseHeaders,
+                                                string methodUrl,
+                                                CancellationToken cancToken)
         {
             var result = default(T);
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
@@ -1529,7 +1306,7 @@ namespace CustardApi.Objects
                 request.Content = SetContentRequestFromString(contentType, jsonBody);
 
                 // Send the request
-                result = await SendRequest<T>(unSuccessCallback, singleUseHeaders, request);
+                result = await SendRequest<T>(unSuccessCallback, singleUseHeaders, request, cancToken);
 
             }
 
@@ -1549,7 +1326,7 @@ namespace CustardApi.Objects
         /// <param name="methodUrl"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<T> ProcessRequest<T>(string contentType, HttpContent httpContent, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, string methodUrl)
+        private async Task<T> ProcessRequest<T>(string contentType, HttpContent httpContent, HttpMethod httpMethod, Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, string methodUrl, CancellationToken cancToken)
         {
             var result = default(T);
             using (var request = new HttpRequestMessage(httpMethod, methodUrl))
@@ -1558,7 +1335,7 @@ namespace CustardApi.Objects
                 request.Content = httpContent;
 
                 // Send the request
-                result = await SendRequest<T>(unSuccessCallback, singleUseHeaders, request);
+                result = await SendRequest<T>(unSuccessCallback, singleUseHeaders, request, cancToken);
 
             }
 
@@ -1590,7 +1367,7 @@ namespace CustardApi.Objects
         /// <param name="request"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task<T> SendRequest<T>(Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, HttpRequestMessage request)
+        private async Task<T> SendRequest<T>(Action<HttpResponseMessage> unSuccessCallback, IDictionary<string, string> singleUseHeaders, HttpRequestMessage request, CancellationToken cancToken)
         {
             var result = default(T);
             // These are the headers we'll use in the request 
@@ -1616,19 +1393,27 @@ namespace CustardApi.Objects
             // Handler
             try
             {
+                // Set client
                 using var handler = new HttpClientHandler();
-                using var client = new HttpClient(handler);
-                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
 
+                // Get the clietn
+                using var client = new HttpClient(handler);
+
+                //Get a response
+                using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
+
+                // Extract the result
                 var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                     unSuccessCallback?.Invoke(response);
 
                 if (typeof(T) == typeof(string))
-                    result = (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
+                    return (T)(object)(response.Content == null ? null : await response.Content.ReadAsStringAsync());
                 else if (content != null)
-                    result = JsonConvert.DeserializeObject<T>(content);
+                    return JsonConvert.DeserializeObject<T>(content);
+                else
+                    return default;
 
 
             }
@@ -1640,6 +1425,10 @@ namespace CustardApi.Objects
 
             return result;
         }
+
+
+        
+
         /// <summary>
         ///  Method to create a url with the given path parameters
         /// </summary>
@@ -1655,6 +1444,7 @@ namespace CustardApi.Objects
 
             return initialUrl;
         }
+
 
         /// <summary>
         ///  Method to create a url with the given query parameters
