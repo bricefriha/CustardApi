@@ -1506,7 +1506,6 @@ namespace CustardApi.Objects
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
         public Task<T> Delete<T>(string controller,
-                                 string jsonBody,
                                  string action = null,
                                  Action<HttpResponseMessage> unSuccessCallback = null,
                                  IDictionary<string, string> singleUseHeaders = null,
