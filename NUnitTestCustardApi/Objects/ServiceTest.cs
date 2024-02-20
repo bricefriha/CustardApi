@@ -11,6 +11,7 @@ using System.Net;
 using System.Reflection.PortableExecutable;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Threading;
 
 namespace NUnitTestCustardApi
 {
@@ -153,7 +154,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds", jsonBody: null);
+            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds");
 
             _service.Dispose();
 
@@ -200,7 +201,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists", jsonBody: null);
+            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists");
 
             _service.Dispose();
 
@@ -226,7 +227,10 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Todolist actualResult = await _service.Put<Todolist>("todolists", "rename", parameters, body );
+            Todolist actualResult = await _service.Put<Todolist>(controller: "todolists", 
+                                                                 action: "rename", 
+                                                                 parameters: parameters, 
+                                                                 jsonBody: body );
 
             _service.Dispose();
 
@@ -293,7 +297,7 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            string actualResult = await _service.Get("todolists", jsonBody: null);
+            string actualResult = await _service.Get(controller:"todolists");
 
             _service.Dispose();
             // Assert
@@ -313,7 +317,10 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            string actualResult = await _service.Put("todolists", "rename", parameters, body);
+            string actualResult = await _service.Put(controller: "todolists", 
+                                                     action: "rename", 
+                                                     parameters: parameters, 
+                                                     jsonBody: body);
 
             _service.Dispose();
             // Assert
@@ -340,7 +347,8 @@ namespace NUnitTestCustardApi
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.Delete("todolists", jsonBody: null, parameters: parameters);
+            string actualResult = await _service.Delete("todolists", 
+                                                        parameters: parameters);
 
             _service.Dispose();
 
@@ -382,7 +390,9 @@ namespace NUnitTestCustardApi
            
 
             // Act
-            var resultStr = await _serviceReqres.Get(controller: controller, action: action,parameters: param);
+            var resultStr = await _serviceReqres.Get(controller: controller, 
+                                                     action: action, 
+                                                     parameters: param);
             // Assert
             Console.WriteLine(_serviceReqres.LastCall);
             Assert.IsNotNull(resultStr);
@@ -400,7 +410,9 @@ namespace NUnitTestCustardApi
             string controller = "api";
 
             // Act
-            var result = await _serviceReqres.Post<ReqresUser>(controller: controller, action: action, jsonBody: JsonConvert.SerializeObject(userToCreate) );
+            var result = await _serviceReqres.Post<ReqresUser>(controller: controller, 
+                                                               action: action, 
+                                                               jsonBody: JsonConvert.SerializeObject(userToCreate) );
             
             // Assert
             Console.WriteLine(JsonConvert.SerializeObject(result));
@@ -435,7 +447,10 @@ namespace NUnitTestCustardApi
             string[] param = { "2" };
 
             // Act
-            var result = await _serviceReqres.Delete(controller: controller, action: action, parameters: param, unSuccessCallback: (err) =>
+            var result = await _serviceReqres.Delete(controller: controller, 
+                                                     action: action, 
+                                                     parameters: param, 
+                                                     unSuccessCallback: (err) =>
             {
                 Assert.Fail(err.ReasonPhrase);
             });
@@ -443,6 +458,28 @@ namespace NUnitTestCustardApi
             // Assert
             Console.WriteLine(JsonConvert.SerializeObject(result));
             Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task CancellationTokenRequest()
+        {
+            // Arrange
+            const string controller = "feeds";
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var cancelationToken = cancellationTokenSource.Token;
+
+            // Act
+            var res = await _serviceReqres.Post(controller: controller,
+                                               cancellationToken: cancelationToken);
+            // Simulate cancellation after 3 seconds
+            Thread.Sleep(3000);
+
+            // Request cancellation
+            cancellationTokenSource.Cancel();
+
+            // Assert
+            Assert.IsNull(res);
+
+
         }
     }
 }
