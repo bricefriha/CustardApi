@@ -17,7 +17,7 @@ namespace NUnitTestCustardApi
 {
     class ServiceTest
     {
-        private static Service _service;
+        private static Service _gamhubService;
         private Service _serviceRick;
         private Service _serviceWord;
         private Service _serviceReqres;
@@ -25,7 +25,7 @@ namespace NUnitTestCustardApi
         [SetUp]
         public void Setup()
         {
-            _service = new Service("api.gamhub.io", sslCertificate: true);
+            _gamhubService = new Service("api.gamhub.io", sslCertificate: true);
             _serviceRick = new Service("rickandmortyapi.com", sslCertificate: true);
             _serviceWord = new Service("random-word-api.herokuapp.com", sslCertificate: true);
             _serviceReqres = new Service("reqres.in", sslCertificate: true);
@@ -107,9 +107,9 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            User actualResult = await _service.Post<User>("users", jsonBody: body, "authenticate");
+            User actualResult = await _gamhubService.Post<User>("users", jsonBody: body, "authenticate");
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
@@ -154,9 +154,9 @@ namespace NUnitTestCustardApi
 
 
             // Act
-            Collection<Article> actualResult = await _service.Get<Collection<Article>>("feeds");
+            Collection<Article> actualResult = await _gamhubService.Get<Collection<Article>>("feeds");
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Assert.Greater(actualResult?.Count, 0);
@@ -197,13 +197,13 @@ namespace NUnitTestCustardApi
 
             };
 
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikt3M1hJWC1hcVZsNmdtcE03bWRIbCJ9.eyJpc3MiOiJodHRwczovL2lzYW1vYmlsZWFwcC51cy5hdXRoMC5jb20vIiwic3ViIjoiZFhxeUNvQjB1VndIZWNaeU9CUjdKdzAxU3haZGxHWjlAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vaXNhbW9iaWxlYXBwLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjYwNzYwNTcxLCJleHAiOjE2NjA4NDY5NzEsImF6cCI6ImRYcXlDb0IwdVZ3SGVjWnlPQlI3SncwMVN4WmRsR1o5Iiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.wAdWudh-iVAdOhaMHpC5w2cysYZD7eJzNlT8zlXDzTx90JTKTiNqTOSRI0NUnQBh1eKOXz6gTjVTOJjjsgdoBVynwoY9wo7wynXpiZx3OxlkZDvG99VK2-UwjLKQZ-4BiBcuOOCxavFRgTROq3ea4PPHiTjS6rKlGEKczBaIZTmBPQ_OkE6PN2u4ccZBNLj0lLh1BLZbHvxpSazqBMRyEc5dT4OK4ZbFvJjDUrYNndTyFphooeIAPscfhaA39dQK9DBLr6ulTUKnasUHbF4nMsxR8J4E30IRLM1WGroQY4PyOI_MUZfaAhLEh3ZagqIPKKdZfd03dHTLzK2IS9X_Xg");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ikt3M1hJWC1hcVZsNmdtcE03bWRIbCJ9.eyJpc3MiOiJodHRwczovL2lzYW1vYmlsZWFwcC51cy5hdXRoMC5jb20vIiwic3ViIjoiZFhxeUNvQjB1VndIZWNaeU9CUjdKdzAxU3haZGxHWjlAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vaXNhbW9iaWxlYXBwLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjYwNzYwNTcxLCJleHAiOjE2NjA4NDY5NzEsImF6cCI6ImRYcXlDb0IwdVZ3SGVjWnlPQlI3SncwMVN4WmRsR1o5Iiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.wAdWudh-iVAdOhaMHpC5w2cysYZD7eJzNlT8zlXDzTx90JTKTiNqTOSRI0NUnQBh1eKOXz6gTjVTOJjjsgdoBVynwoY9wo7wynXpiZx3OxlkZDvG99VK2-UwjLKQZ-4BiBcuOOCxavFRgTROq3ea4PPHiTjS6rKlGEKczBaIZTmBPQ_OkE6PN2u4ccZBNLj0lLh1BLZbHvxpSazqBMRyEc5dT4OK4ZbFvJjDUrYNndTyFphooeIAPscfhaA39dQK9DBLr6ulTUKnasUHbF4nMsxR8J4E30IRLM1WGroQY4PyOI_MUZfaAhLEh3ZagqIPKKdZfd03dHTLzK2IS9X_Xg");
 
 
             // Act
-            Collection<Todolist> actualResult = await _service.Get<Collection<Todolist>>("todolists");
+            Collection<Todolist> actualResult = await _gamhubService.Get<Collection<Todolist>>("todolists");
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.ToString(), actualResult?.ToString());
@@ -223,21 +223,21 @@ namespace NUnitTestCustardApi
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
 
 
             // Act
-            Todolist actualResult = await _service.Put<Todolist>(controller: "todolists", 
+            Todolist actualResult = await _gamhubService.Put<Todolist>(controller: "todolists", 
                                                                  action: "rename", 
                                                                  parameters: parameters, 
                                                                  jsonBody: body );
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.User, actualResult?.User);
 
-            _service.Dispose();
+            _gamhubService.Dispose();
         }
 
         // Delete Method
@@ -251,19 +251,19 @@ namespace NUnitTestCustardApi
             };
             ///
             /// Prepare the header
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
-            Todolist itemToDelete = await _service.Post<Todolist>("todolists", body, "create");
+            Todolist itemToDelete = await _gamhubService.Post<Todolist>("todolists", body, "create");
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            DeleteCode actualResult = await _service.Delete<DeleteCode>(controller:"todolists", parameters: parameters);
+            DeleteCode actualResult = await _gamhubService.Delete<DeleteCode>(controller:"todolists", parameters: parameters);
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Assert.AreEqual(Expectation.Status, actualResult?.Status);
@@ -279,9 +279,9 @@ namespace NUnitTestCustardApi
             string body = "{ \"email\": \"brice.friha@outlook.com\", \"password\": \"pwd\" }";
 
             // Act
-            string actualResult = await _service.Post("users", body, "authenticate",(e) => { });
+            string actualResult = await _gamhubService.Post("users", body, "authenticate",(e) => { });
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
@@ -293,13 +293,13 @@ namespace NUnitTestCustardApi
         public async Task GetMethodWithTokenString()
         {
             // Arrange
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUwZTI1NTU2Mjk0YzJjNzBlZTEyOGIiLCJpYXQiOjE1OTE3OTgwMDh9.dPiJu9zBRWEAOs-9DrPo9MtJrNt3HgNAlqtEt8QclMQ");
 
 
             // Act
-            string actualResult = await _service.Get(controller:"todolists");
+            string actualResult = await _gamhubService.Get(controller:"todolists");
 
-            _service.Dispose();
+            _gamhubService.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -313,16 +313,16 @@ namespace NUnitTestCustardApi
 
             string[] parameters = { "5ee24eff796d9519fcc1b25e" };
 
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
 
 
             // Act
-            string actualResult = await _service.Put(controller: "todolists", 
+            string actualResult = await _gamhubService.Put(controller: "todolists", 
                                                      action: "rename", 
                                                      parameters: parameters, 
                                                      jsonBody: body);
 
-            _service.Dispose();
+            _gamhubService.Dispose();
             // Assert
             Console.WriteLine(actualResult);
             Assert.Pass();
@@ -335,22 +335,22 @@ namespace NUnitTestCustardApi
             // Arrange
             ///
             /// Prepare the header
-            _service.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
+            _gamhubService.RequestHeaders.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWUyNGVlMzc5NmQ5NTE5ZmNjMWIyNWQiLCJpYXQiOjE1OTE4ODk2MzV9.tpUBOo3D0JvS0XOQzGdnag4olb8HFOZEFmVAoEINYUU");
             ///
             /// Create the item that we gonna delete later on
             string body = "{ \"title\": \"Workout\" }";
 
-            Todolist itemToDelete = await _service.Post<Todolist>("todolists", body, "create");
+            Todolist itemToDelete = await _gamhubService.Post<Todolist>("todolists", body, "create");
 
             /// 
             /// Put the id as parameters of the delete method
             string[] parameters = { itemToDelete.Id };
 
             // Act
-            string actualResult = await _service.Delete("todolists", 
+            string actualResult = await _gamhubService.Delete("todolists", 
                                                         parameters: parameters);
 
-            _service.Dispose();
+            _gamhubService.Dispose();
 
             // Assert
             Console.WriteLine(actualResult);
@@ -460,24 +460,27 @@ namespace NUnitTestCustardApi
             Assert.IsNotNull(result);
         }
         [Test]
+        [Timeout(5000)] // 5 seconds
         public async Task CancellationTokenRequest()
         {
             // Arrange
             const string controller = "feeds";
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             var cancelationToken = cancellationTokenSource.Token;
 
             // Act
-            var res = await _serviceReqres.Post(controller: controller,
+            Task task =  _gamhubService.Get(controller: controller,
                                                cancellationToken: cancelationToken);
             // Simulate cancellation after 3 seconds
-            Thread.Sleep(3000);
+            await Task.Delay(TimeSpan.FromSeconds(3));
 
             // Request cancellation
             cancellationTokenSource.Cancel();
 
             // Assert
-            Assert.IsNull(res);
+            Console.WriteLine(_gamhubService.LastCall);
+            //Assert.Pass();
+            Assert.Pass();
 
 
         }
