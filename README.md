@@ -32,7 +32,9 @@ Service yourService = new Service(string host, int port = 80, bool sslCertificat
 ```C#
 yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every headers
 ```
-
+> ⚠ For every method below, we recommend being very explicit with your parameters. As there are too many options for parameters, this could lead to ambiguities.
+>
+>  e.g: use `Get(controller: theController)` instead of `Get(theController)`
 - ### Call a POST method
 
   **Parameters**:
@@ -49,11 +51,19 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   **Usage**:
   - To return a string:
     ```C#
-    yourService.Post (controller, action, headers, jsonBody, parameters);
+    yourService.Post (controller: controller,
+                      action: action,
+                      singleUseHeaders: headers,
+                      jsonBody: jsonBody,
+                      parameters: parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.Post<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Post<T> (controller: controller,
+                         action: action,
+                         singleUseHeaders: headers,
+                         jsonBody: jsonBody,
+                         parameters: parameters);
     ```
 - ### Call a PUT method
 
@@ -71,11 +81,19 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   **Usage**:
   - To return a string:
     ```C#
-    yourService.Put (controller, action, headers, jsonBody, parameters);
+    yourService.Put (controller: controller,
+                     action: action,
+                     singleUseHeaders: headers,
+                     jsonBody: jsonBody,
+                     parameters: parameters);
     ```
   - To return a model (T is the model):
     ```C#
-    yourService.Put<T> (controller, action, headers, jsonBody, parameters);
+    yourService.Put<T> (controller: controller,
+                        action: action,
+                        singleUseHeaders: headers,
+                        jsonBody: jsonBody,
+                        parameters: parameters);
     ```
 
 - ### Call a GET method
@@ -94,11 +112,19 @@ yourService.RequestHeaders.Add("Hearder", "Value "); // Do this for every header
   **Usage**:
   - To return a string:
   ```C#
-  yourService.Get (controller, action, headers, jsonBody, parameters);
+  yourService.Get (controller: controller,
+                   action: action,
+                   singleUseHeaders: headers,
+                   jsonBody: jsonBody,
+                   parameters: parameters);
   ```
   - To return a model (T is the model):
   ```C#
-  yourService.Get<T> (controller, action, headers, jsonBody, parameters);
+  yourService.Get<T> (controller: controller,
+                      action: action,
+                      singleUseHeaders: headers,
+                      jsonBody: jsonBody,
+                      parameters: parameters);
   ```
 
 ## Passing Parameters to your requests
@@ -115,7 +141,9 @@ string action = "users";
 string controller = "api";
 string[] param = { "2", "3", "4" };
            
-var resultStr = await yourService.Get(controller: controller, action: action, parameters: param);
+var resultStr = await yourService.Get(controller: controller,
+                                      action: action,
+                                      parameters: param);
 ```
 ### Path parameters
 To pass query parameters to your requests, you have to pass them as `Dictionary<string, string>`:
@@ -132,19 +160,20 @@ Dictionary<string, string> param = new Dictionary<string, string>
     { "four", "4" }
 };
            
-var resultStr = await yourService.Get(controller: controller, action: action, parameters: param);
+var resultStr = await yourService.Get(controller: controller,
+                                      action: action,
+                                      parameters: param);
 ```
 
 > ⚠ If you want to return a model, the HTTP response body has to be in JSON format
-
-
-  **I didn't finish the documentation. That's why it's so ugly. Sorry about that 😁**
 
 - ### Callback Error
   If needed, you can add a callback if the request faces an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
   Here's how it works:
   ``` Csharp
-  var actualResult = await yourService.Get("todolists", headers: headers, callbackError: (err) => 
+  var actualResult = await yourService.Get(controller: "todolists",
+                                           singleUseHeader: headers,
+                                           callbackError: (err) => 
             {
                 
             });
