@@ -1107,7 +1107,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// 
         /// <returns>Result of the request</returns>
@@ -1129,7 +1129,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1150,7 +1150,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1195,7 +1195,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1236,7 +1236,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1258,7 +1258,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1284,7 +1284,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// 
         /// <returns>Result of the request</returns>
@@ -1306,7 +1306,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1349,7 +1349,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1373,17 +1373,17 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
         public Task<string> Get(string controller,
-                                IDictionary<string, string> parameters,
+                                 IDictionary<string, string> parameters,
                                  object payload,
-                                string action = null,
-                                Action<HttpResponseMessage> unSuccessCallback = null,
-                                IDictionary<string, string> singleUseHeaders = null,
-                                CancellationToken cancellationToken = default)
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
         {
 
             return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
@@ -1394,17 +1394,17 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
         public Task<string> Put(string controller,
-                                IDictionary<string, string> parameters,
+                                 IDictionary<string, string> parameters,
                                  object payload,
-                                string action = null,
-                                Action<HttpResponseMessage> unSuccessCallback = null,
-                                IDictionary<string, string> singleUseHeaders = null,
-                                CancellationToken cancellationToken = default)
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
         {
             return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
         }
@@ -1414,7 +1414,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1436,7 +1436,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1462,7 +1462,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// 
         /// <returns>Result of the request</returns>
@@ -1483,7 +1483,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1524,7 +1524,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1546,7 +1546,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="jsonBody">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1566,7 +1566,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="payload">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
@@ -1585,7 +1585,7 @@ namespace CustardApi.Objects
         /// <typeparam name="T">type of return</typeparam>
         /// <param name="controller">name of the controller</param>
         /// <param name="action">name of the action</param>
-        /// <param name="payload">body in json</param>
+        /// <param name="payload">object payload</param>
         /// <param name="singleUseHeaders">headers that will only be used in this request</param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>Result of the request</returns>
