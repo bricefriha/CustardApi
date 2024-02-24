@@ -1099,6 +1099,531 @@ namespace CustardApi.Objects
         }
 
         #endregion
+        #region with object payload
+        #region Path parameters requests
+        /// <summary>
+        /// Execute a post method without header and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// 
+        /// <returns>Result of the request</returns>
+        public Task<T> Post<T>(string controller,
+                               string[] parameters,
+                               object payload,
+                               string action = null,
+                               Action<HttpResponseMessage> unSuccessCallback = null,
+                               IDictionary<string, string> singleUseHeaders = null,
+                               CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Get<T>(string controller,
+                              string[] parameters,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Put<T>(string controller,
+                              string[] parameters,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Delete<T>(string controller,
+                                 string[] parameters,
+                                 object payload,
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Get(string controller,
+                                string[] parameters,
+                                object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                                CancellationToken cancellationToken = default)
+        {
+
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Put(string controller,
+                                string[] parameters,
+                                object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                                CancellationToken cancellationToken = default)
+        {
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a post method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Post(string controller,
+                                 string[] parameters,
+                                 object payload,
+                                string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Delete(string controller,
+                                   string[] parameters,
+                                   object payload,
+                                   string action = null,
+                                   Action<HttpResponseMessage> unSuccessCallback = null,
+                                   IDictionary<string, string> singleUseHeaders = null,
+                                   CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        #endregion
+
+        #region Query parameters requests
+        /// <summary>
+        /// Execute a post method without header and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// 
+        /// <returns>Result of the request</returns>
+        public Task<T> Post<T>(string controller,
+                               IDictionary<string, string> parameters,
+                               object payload,
+                               string action = null,
+                               Action<HttpResponseMessage> unSuccessCallback = null,
+                               IDictionary<string, string> singleUseHeaders = null,
+                               CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Get<T>(string controller,
+                              IDictionary<string, string> parameters,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), JsonConvert.SerializeObject(payload), parameters, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Put<T>(string controller,
+                              IDictionary<string, string> parameters,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Delete<T>(string controller,
+                                 IDictionary<string, string> parameters,
+                                 object payload,
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Get(string controller,
+                                IDictionary<string, string> parameters,
+                                 object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                                CancellationToken cancellationToken = default)
+        {
+
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Put(string controller,
+                                IDictionary<string, string> parameters,
+                                 object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                                CancellationToken cancellationToken = default)
+        {
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a post method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Post(string controller,
+                                 IDictionary<string, string> parameters,
+                                 object payload,
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Delete(string controller,
+                                   IDictionary<string, string> parameters,
+                                   object payload,
+                                   string action = null,
+                                   Action<HttpResponseMessage> unSuccessCallback = null,
+                                   IDictionary<string, string> singleUseHeaders = null,
+                                   CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, parameters, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        #endregion
+
+        #region without parameters
+        /// <summary>
+        /// Execute a post method without header and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// 
+        /// <returns>Result of the request</returns>
+        public Task<T> Post<T>(string controller,
+                               object payload,
+                               string action = null,
+                               Action<HttpResponseMessage> unSuccessCallback = null,
+                               IDictionary<string, string> singleUseHeaders = null,
+                               CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Get<T>(string controller,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Put<T>(string controller,
+                              object payload,
+                              string action = null,
+                              Action<HttpResponseMessage> unSuccessCallback = null,
+                              IDictionary<string, string> singleUseHeaders = null,
+                              CancellationToken cancellationToken = default)
+        {
+
+
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<T> Delete<T>(string controller,
+                                 object payload,
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<T>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        /// <summary>
+        /// Execute a get method and return a string
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="jsonBody">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Get(string controller,
+                                object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                               CancellationToken cancellationToken = default)
+        {
+
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Get, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a put method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="payload">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Put(string controller,
+                                object payload,
+                                string action = null,
+                                Action<HttpResponseMessage> unSuccessCallback = null,
+                                IDictionary<string, string> singleUseHeaders = null,
+                               CancellationToken cancellationToken = default)
+        {
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Put, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a post method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="payload">body in json</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Post(string controller,
+                                 object payload,
+                                 string action = null,
+                                 Action<HttpResponseMessage> unSuccessCallback = null,
+                                 IDictionary<string, string> singleUseHeaders = null,
+                                 CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Post, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+        /// <summary>
+        /// Execute a delete method and return a model
+        /// </summary>
+        /// <typeparam name="T">type of return</typeparam>
+        /// <param name="controller">name of the controller</param>
+        /// <param name="action">name of the action</param>
+        /// <param name="payload">object payload</param>
+        /// <param name="singleUseHeaders">headers that will only be used in this request</param>
+        /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
+        /// <returns>Result of the request</returns>
+        public Task<string> Delete(string controller,
+                                   object payload,
+                                   string action = null,
+                                   Action<HttpResponseMessage> unSuccessCallback = null,
+                                   IDictionary<string, string> singleUseHeaders = null,
+                                   CancellationToken cancellationToken = default)
+        {
+
+            // Get the reponse
+            return Process<string>(controller, "application/json", JsonConvert.SerializeObject(payload), action, HttpMethod.Delete, cancellationToken, unSuccessCallback, singleUseHeaders: singleUseHeaders);
+        }
+
+        #endregion
+        #endregion
 
         #region Without payload
         #region Path parameters requests
@@ -1709,7 +2234,14 @@ namespace CustardApi.Objects
         /// <param name="action"></param>
         /// <param name="httpMethod"></param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, HttpContent httpContent, string action, string[] parameters, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, 
+                                         string contentType, 
+                                         HttpContent httpContent, 
+                                         string action, 
+                                         string[] parameters, 
+                                         HttpMethod httpMethod, 
+                                         CancellationToken cancToken, 
+                                         Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
@@ -1732,7 +2264,15 @@ namespace CustardApi.Objects
         /// <param name="httpMethod"></param>
         /// <param name="unSuccessCallback">Action excecuted in when the call returns an unsuccessful status</param>
         /// <returns>response of the method in the form of a model</returns>
-        private async Task<T> Process<T>(string controller, string contentType, string payload, string action, IDictionary<string, string> parameters, HttpMethod httpMethod, CancellationToken cancToken, Action<HttpResponseMessage> unSuccessCallback = null, IDictionary<string, string> singleUseHeaders = null)
+        private async Task<T> Process<T>(string controller, 
+                                         string contentType, 
+                                         string payload, 
+                                         string action, 
+                                         IDictionary<string, string> parameters, 
+                                         HttpMethod httpMethod, 
+                                         CancellationToken cancToken, 
+                                         Action<HttpResponseMessage> unSuccessCallback = null, 
+                                         IDictionary<string, string> singleUseHeaders = null)
         {
             try
             {
