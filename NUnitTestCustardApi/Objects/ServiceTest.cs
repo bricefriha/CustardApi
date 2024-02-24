@@ -410,27 +410,6 @@ namespace NUnitTestCustardApi
             string controller = "api";
 
             // Act
-            var result = await _serviceReqres.Post<ReqresUser>(controller: controller,
-                                                               action: action,
-                                                               payload: userToCreate);
-
-            // Assert
-            Console.WriteLine(JsonConvert.SerializeObject(result));
-            Assert.IsNotNull(result);
-        }
-        [Test]
-        public async Task PostMethodJsonPayload()
-        {
-            // Arrange
-            var userToCreate = new ReqresUser
-            {
-                Name = "morpheus",
-                Job = "leader"
-            };
-            string action = "users";
-            string controller = "api";
-
-            // Act
             var result = await _serviceReqres.Post<ReqresUser>(controller: controller, 
                                                                action: action, 
                                                                jsonBody: JsonConvert.SerializeObject(userToCreate) );
