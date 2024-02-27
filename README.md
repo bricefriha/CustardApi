@@ -145,7 +145,7 @@ var resultStr = await yourService.Get(controller: controller,
                                       action: action,
                                       parameters: param);
 ```
-### Path parameters
+### Query parameters
 To pass query parameters to your requests, you have to pass them as `Dictionary<string, string>`:
 
 **E.g**: for `/users/api?two=2&three=3&four=4` we would use:
