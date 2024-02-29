@@ -2486,6 +2486,17 @@ namespace CustardApi.Objects
                 //Get a response
                 using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
 
+                // If the type is a byte array
+                if (typeof(T) == typeof(byte[]))
+                {
+                    // Extract the result as bytes
+                    byte[] contentBytes = response.Content == null ? null : await response.Content.ReadAsByteArrayAsync();
+                    if (contentBytes != null)
+                        return (T)(object)contentBytes;
+                    return default;
+
+                }
+                
                 // Extract the result
                 var content = response.Content == null ? null : await response.Content.ReadAsStringAsync();
 
