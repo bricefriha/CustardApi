@@ -1,0 +1,19 @@
+on:
+  push:
+    tags:
+      - "v0.3.[0-9]+-rc"
+    branches:
+      -develop
+env: 
+        NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+jobs:
+  
+  Build:
+    name: package
+    runs-on: windows-latest
+    
+    steps:
+    - name: Set VERSION variable from tag
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+    - run: dotnet pack --configuration Release
+    - run: dotnet nuget push bin/Release/Custard.${VERSION}.nupkg  --api-key $NUGET_TOKEN --source "github"
