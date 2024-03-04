@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>9.0</LangVersion>
-    <Version>0.3.5-rc</Version>
+    <Version>0.3.6-rc</Version>
     <Authors>Brice Friha</Authors>
     <Product>Custard</Product>
     <PackageId>Custard</PackageId>
