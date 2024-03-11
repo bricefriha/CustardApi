@@ -16,11 +16,11 @@ Fully compatible with:
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.3.3
+  Install-Package Custard -Version 0.3.5
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.3.3
+  dotnet add package Custard --version 0.3.5
   ```
 ## Custard.Service
 - ### Instantiate a service object:
@@ -149,7 +149,7 @@ var resultStr = await yourService.Get(controller: controller,
 To pass query parameters to your requests, you have to pass them as `Dictionary<string, string>`:
 
 **E.g**: for `/users/api?two=2&three=3&four=4` we would use:
-``` C#
+```Csharp
 string action = "users";
 string controller = "api";
 
@@ -166,6 +166,18 @@ var resultStr = await yourService.Get(controller: controller,
 ```
 
 > ⚠ If you want to return a model, the HTTP response body has to be in JSON format
+
+### Cancellation Token
+From v0.3.5, you can now add a cancellation token to you request.
+```Csharp
+using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+var cancelationToken = cancellationTokenSource.Token;
+//
+
+// Act
+Task task =  _wService.Get(controller: controller,
+                                cancellationToken: cancelationToken);
+```
 
 - ### Callback Error
   If needed, you can add a callback if the request faces an HTTP error. This will work with any method mentioned above. This will allow you to do an handle the error       more easily.
