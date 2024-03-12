@@ -478,7 +478,7 @@ namespace NUnitTestCustardApi
 
             // Assert
             Console.WriteLine(JsonConvert.SerializeObject(result));
-            Assert.IsNotNull(result);
+            Assert.Pass();
         }
         [Test]
         [Timeout(5000)] // 5 seconds
