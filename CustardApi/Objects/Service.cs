@@ -2504,7 +2504,7 @@ namespace CustardApi.Objects
                 if (!response.IsSuccessStatusCode)
                     unSuccessCallback?.Invoke(response);
 
-                if (typeof(T) == typeof(string))
+                if (typeof(T) != typeof(string))
                 {
                     using var stream = await response.Content.ReadAsStreamAsync();
                     using var reader = new StreamReader(stream);
@@ -2513,7 +2513,7 @@ namespace CustardApi.Objects
                     return serializer.Deserialize<T>(json);
                 }
                 else if (response.Content != null)
-                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+                    return (T)(object)content;//JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
                 else
                     return default;
 
