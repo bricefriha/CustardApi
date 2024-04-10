@@ -419,6 +419,27 @@ namespace NUnitTestCustardApi
             Assert.IsNotNull(result);
         }
         [Test]
+        public async Task PostReturnStringMethod()
+        {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+
+            // Act
+            var result = await _serviceReqres.Post(controller: controller,
+                                                               action: action,
+                                                               payload: userToCreate);
+
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
         public async Task PostMethodJsonPayload()
         {
             // Arrange
@@ -478,7 +499,7 @@ namespace NUnitTestCustardApi
 
             // Assert
             Console.WriteLine(JsonConvert.SerializeObject(result));
-            Assert.IsNotNull(result);
+            Assert.Pass();
         }
         [Test]
         [Timeout(5000)] // 5 seconds

@@ -3,6 +3,7 @@ using CustardApi.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -2503,10 +2504,16 @@ namespace CustardApi.Objects
                 if (!response.IsSuccessStatusCode)
                     unSuccessCallback?.Invoke(response);
 
-                if (typeof(T) == typeof(string))
-                    return (T)(object)content;
-                else if (content != null)
-                    return JsonConvert.DeserializeObject<T>(content);
+                if (typeof(T) != typeof(string))
+                {
+                    using var stream = await response.Content.ReadAsStreamAsync();
+                    using var reader = new StreamReader(stream);
+                    using var json = new JsonTextReader(reader);
+                    var serializer = JsonSerializer.CreateDefault();
+                    return serializer.Deserialize<T>(json);
+                }
+                else if (response.Content != null)
+                    return (T)(object)content;//JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
                 else
                     return default;
 
