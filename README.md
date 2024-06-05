@@ -16,11 +16,11 @@ Fully compatible with:
 ## Installation
 - Package manager
   ```Bash
-  Install-Package Custard -Version 0.3.5
+  Install-Package Custard -Version 0.3.7
   ```
 - .NET CLI
   ```Bash
-  dotnet add package Custard --version 0.3.5
+  dotnet add package Custard --version 0.3.7
   ```
 ## Custard.Service
 - ### Instantiate a service object:
