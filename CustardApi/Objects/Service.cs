@@ -2512,8 +2512,7 @@ namespace CustardApi.Objects
                     using var stream = await response.Content.ReadAsStreamAsync();
                     using var reader = new StreamReader(stream);
                     using var json = new JsonTextReader(reader);
-                    var serializer = JsonSerializer.CreateDefault();
-                    return serializer.Deserialize<T>(json);
+                    return JsonSerializer.CreateDefault().Deserialize<T>(json);
                 }
                 else if (response.Content != null)
                     return (T)(object)content;//JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
