@@ -2481,11 +2481,9 @@ namespace CustardApi.Objects
             // Handler
             try
             {
-                // Set client
-                var handler = _customHandler ?? new SocketsHttpHandler();
 
                 // Get the client
-                using var client = new HttpClient(handler);
+                using var client = new HttpClient(_customHandler ?? new SocketsHttpHandler(), disposeHandler: _customHandler is not null);
 
                 //Get a response
                 using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
