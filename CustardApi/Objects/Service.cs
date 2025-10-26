@@ -21,6 +21,7 @@ namespace CustardApi.Objects
         private string _lastController;
         private string _lastAction;
         private Dictionary<string, string> _requestHeaders;
+        private HttpMessageHandler _customHandler;
 
 
 
@@ -33,6 +34,7 @@ namespace CustardApi.Objects
         public string BaseUrl { get => _baseUrl; }
         public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
         public Dictionary<string, string> LastCallRequestHeaders { get => _requestHeaders; private set => _requestHeaders = value; }
+        public HttpMessageHandler CustomHandler { get => _customHandler; set => _customHandler = value; }
 
         /// <summary>
         /// Constructor
@@ -41,7 +43,7 @@ namespace CustardApi.Objects
         /// <param name="port">port</param>
         /// <param name="sslCertificate">Is there an ssl certificate applied?</param>
 
-        public Service(string host, int port = 80, bool sslCertificate = false)
+        public Service(string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
         {
             _host = host;
             _port = port;
@@ -2479,9 +2481,9 @@ namespace CustardApi.Objects
             try
             {
                 // Set client
-                using var handler = new SocketsHttpHandler();
-                //using var handler = new HttpClientHandler();
-                // Get the clietn
+                using var handler = _customHandler ?? new SocketsHttpHandler();
+
+                // Get the client
                 using var client = new HttpClient(handler);
 
                 //Get a response
