@@ -2482,7 +2482,7 @@ namespace CustardApi.Objects
             try
             {
                 // Set client
-                using var handler = _customHandler ?? new SocketsHttpHandler();
+                var handler = _customHandler ?? new SocketsHttpHandler();
 
                 // Get the client
                 using var client = new HttpClient(handler);
