@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
 	  <LangVersion>9.0</LangVersion>
-    <Version>0.3.6.1-rc</Version>
+    <Version>0.3.9.0-rc</Version>
     <Authors>Brice Friha</Authors>
     <Product>Custard</Product>
     <PackageId>Custard</PackageId>
@@ -21,7 +21,7 @@
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>
     <VersionMinor>3</VersionMinor>
-    <VersionBuild>4</VersionBuild>
+    <VersionBuild>9</VersionBuild>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2479,8 +2479,8 @@ namespace CustardApi.Objects
             try
             {
                 // Set client
-                using var handler = new HttpClientHandler();
-
+                using var handler = new SocketsHttpHandler();
+                //using var handler = new HttpClientHandler();
                 // Get the clietn
                 using var client = new HttpClient(handler);
 
