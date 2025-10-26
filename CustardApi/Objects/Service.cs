@@ -49,6 +49,7 @@ namespace CustardApi.Objects
             _port = port;
             _sslCertificate = sslCertificate;
             _requestHeaders = new Dictionary<string, string>();
+            _customHandler = handler;
 
             // Set the base url up then
             _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}";
