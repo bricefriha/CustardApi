@@ -1,17 +1,18 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
 using CustardApi.Objects;
-using NUnitTestCustardApi.ModelsTest;
-using System.Threading.Tasks;
 using Microsoft.VisualBasic;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Reflection.PortableExecutable;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnitTestCustardApi.ModelsTest;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Net;
+using System.Net.Http;
+using System.Reflection.PortableExecutable;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NUnitTestCustardApi
 {
@@ -451,6 +452,28 @@ namespace NUnitTestCustardApi
             string action = "users";
             string controller = "api";
 
+            // Act
+            var result = await _serviceReqres.Post<ReqresUser>(controller: controller, 
+                                                               action: action, 
+                                                               jsonBody: JsonConvert.SerializeObject(userToCreate) );
+            
+            // Assert
+            Console.WriteLine(JsonConvert.SerializeObject(result));
+            Assert.IsNotNull(result);
+        }
+        [Test]
+        public async Task PostMethodJsonPayloadWithCustomHandler()
+        {
+            // Arrange
+            var userToCreate = new ReqresUser
+            {
+                Name = "morpheus",
+                Job = "leader"
+            };
+            string action = "users";
+            string controller = "api";
+            _serviceReqres.CustomHandler = new HttpClientHandler
+            {};
             // Act
             var result = await _serviceReqres.Post<ReqresUser>(controller: controller, 
                                                                action: action, 
