@@ -1,19 +1,16 @@
 ﻿
 using CustardApi.Objects;
-using Microsoft.VisualBasic;
+using Microsoft.Extensions.DependencyInjection;
+
 using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnitTestCustardApi.ModelsTest;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net;
 using System.Net.Http;
-using System.Reflection.PortableExecutable;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 namespace NUnitTestCustardApi
 {
     class ServiceTest
@@ -396,8 +393,48 @@ namespace NUnitTestCustardApi
                                                      parameters: param);
             // Assert
             Console.WriteLine(_serviceReqres.LastCall);
+            Console.WriteLine(resultStr);
             Assert.IsNotNull(resultStr);
         }
+
+        [Test]
+        public async Task DI_GetMethodWithPathParameters()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var baseUrl = "reqres.in";
+            string action = "users";
+            string controller = "api";
+            string[] param = { "2" };
+
+            // Act
+            services.AddCustard(baseUrl, sslCertificate: true);
+            var provider = services.BuildServiceProvider();
+            var service = provider.GetService<Service>();
+
+            // Act
+            var resultStr = await service.Get(controller: controller,
+                                                     action: action,
+                                                     parameters: param);
+
+            // Assert: Service is registered
+            Assert.NotNull(service);
+
+            // Assert: IHttpClientFactory is registered
+            var factory = provider.GetService<IHttpClientFactory>();
+            Assert.NotNull(factory);
+
+            // Assert: Named client "custard" has correct BaseAddress
+            var client = factory.CreateClient("custard");
+            Assert.AreEqual(new Uri("https://reqres.in/"), client.BaseAddress);
+
+            // Assert final value
+            Console.WriteLine(service.LastCall);
+            Console.WriteLine(resultStr);
+            Assert.IsTrue(!string.IsNullOrEmpty(resultStr));
+        }
+
+
         [Test]
         public async Task PostMethod()
         {
@@ -440,6 +477,7 @@ namespace NUnitTestCustardApi
             Console.WriteLine(JsonConvert.SerializeObject(result));
             Assert.IsNotNull(result);
         }
+
         [Test]
         public async Task PostMethodJsonPayload()
         {
