@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
 	  <LangVersion>9.0</LangVersion>
-    <Version>0.3.9.0-rc</Version>
+    <Version>0.4.0.3-rc</Version>
+	  <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <Authors>Brice Friha</Authors>
     <Product>Custard</Product>
     <PackageId>Custard</PackageId>
@@ -17,6 +18,7 @@
     <Description>Custard is a .NET Standard library allowing to make API method calls easily. 😁</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <IsPackable>true</IsPackable>
   </PropertyGroup>
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>

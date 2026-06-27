@@ -21,6 +21,7 @@ namespace CustardApi.Objects
         private string _lastController;
         private string _lastAction;
         private Dictionary<string, string> _requestHeaders;
+        private HttpMessageHandler _customHandler;
 
 
 
@@ -33,6 +34,7 @@ namespace CustardApi.Objects
         public string BaseUrl { get => _baseUrl; }
         public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
         public Dictionary<string, string> LastCallRequestHeaders { get => _requestHeaders; private set => _requestHeaders = value; }
+        public HttpMessageHandler CustomHandler { get => _customHandler; set => _customHandler = value; }
 
         /// <summary>
         /// Constructor
@@ -41,12 +43,13 @@ namespace CustardApi.Objects
         /// <param name="port">port</param>
         /// <param name="sslCertificate">Is there an ssl certificate applied?</param>
 
-        public Service(string host, int port = 80, bool sslCertificate = false)
+        public Service(string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
         {
             _host = host;
             _port = port;
             _sslCertificate = sslCertificate;
             _requestHeaders = new Dictionary<string, string>();
+            _customHandler = handler;
 
             // Set the base url up then
             _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}";
@@ -2478,11 +2481,9 @@ namespace CustardApi.Objects
             // Handler
             try
             {
-                // Set client
-                using var handler = new SocketsHttpHandler();
-                //using var handler = new HttpClientHandler();
-                // Get the clietn
-                using var client = new HttpClient(handler);
+
+                // Get the client
+                using var client = new HttpClient(_customHandler ?? new SocketsHttpHandler(), disposeHandler: _customHandler is not null);
 
                 //Get a response
                 using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
@@ -2509,8 +2510,7 @@ namespace CustardApi.Objects
                     using var stream = await response.Content.ReadAsStreamAsync();
                     using var reader = new StreamReader(stream);
                     using var json = new JsonTextReader(reader);
-                    var serializer = JsonSerializer.CreateDefault();
-                    return serializer.Deserialize<T>(json);
+                    return JsonSerializer.CreateDefault().Deserialize<T>(json);
                 }
                 else if (response.Content != null)
                     return (T)(object)content;//JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
