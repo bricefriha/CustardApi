@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace CustardApi.Objects
 {
     public class Service : IDisposable
@@ -35,16 +36,32 @@ namespace CustardApi.Objects
         public Dictionary<string, string> RequestHeaders { get => _requestHeaders; /*set => _requestHeaders = value;*/ }
         public Dictionary<string, string> LastCallRequestHeaders { get => _requestHeaders; private set => _requestHeaders = value; }
         public HttpMessageHandler CustomHandler { get => _customHandler; set => _customHandler = value; }
+        private readonly IHttpClientFactory _factory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="host">IP address or servername</param>
+        /// <param name="baseUrl">IP address or servername</param>
         /// <param name="port">port</param>
         /// <param name="sslCertificate">Is there an ssl certificate applied?</param>
 
+        public Service(IHttpClientFactory factory, string baseUrl, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
+        {
+            _factory = factory;
+            _host = baseUrl;
+            _port = port;
+            _sslCertificate = sslCertificate;
+            _requestHeaders = new Dictionary<string, string>();
+            _customHandler = handler;
+
+            // Set the base url up then
+            _baseUrl = $"{(_sslCertificate ? "https" : "http")}://{_host}{(_port == 80 ? "/" : ":" + _port + "/")}";
+        }
+            
+
         public Service(string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
         {
+            _factory = new InternalHttpClientFactory(sslCertificate);
             _host = host;
             _port = port;
             _sslCertificate = sslCertificate;
@@ -55,6 +72,7 @@ namespace CustardApi.Objects
             _baseUrl = $"{ (_sslCertificate ? "https" : "http")}://{ _host}{ (_port == 80 ? "/" : ":" + _port + "/")}";
 
         }
+
         #region Path parameters requests
         /// <summary>
         /// Execute a post method without header and return a model
@@ -2483,7 +2501,7 @@ namespace CustardApi.Objects
             {
                 
                 // Get the client
-                using var client = new HttpClient(_customHandler ?? new SocketsHttpHandler(), disposeHandler: _customHandler is null);
+                using var client = _factory.CreateClient("custard");
 
                 //Get a response
                 using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
