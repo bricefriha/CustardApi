@@ -2169,7 +2169,8 @@ namespace CustardApi.Objects
             }
             catch (Exception ex)
             {
-                throw new Exception("[Issue Handler]: " + ex.Message);
+
+                throw new Exception(ex.Message);
             }
             
 
