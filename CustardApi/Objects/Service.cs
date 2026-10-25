@@ -59,9 +59,9 @@ namespace CustardApi.Objects
         }
             
 
-        public Service(string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
+        public Service(string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null, HttpClientHandler clientHandler = null)
         {
-            _factory = new InternalHttpClientFactory(sslCertificate);
+            _factory = new InternalHttpClientFactory(sslCertificate, clientHandler);
             _host = host;
             _port = port;
             _sslCertificate = sslCertificate;
@@ -2503,7 +2503,6 @@ namespace CustardApi.Objects
                 
                 // Get the client
                 using var client = _factory.CreateClient("custard");
-
                 //Get a response
                 using HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancToken);
 
