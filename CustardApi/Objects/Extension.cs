@@ -6,7 +6,7 @@ namespace CustardApi.Objects;
 
 public static class Extension
 {
-    public static IServiceCollection AddCustard(this IServiceCollection services, string host, int port = 80, bool sslCertificate = false, HttpMessageHandler handler = null)
+    public static IServiceCollection AddCustard(this IServiceCollection services, string host, int port = 80, bool sslCertificate = false, HttpClientHandler handler = null)
     {
         services.AddHttpClient("custard", client =>
         {
@@ -20,7 +20,7 @@ public static class Extension
                 host: host,
                 port: port,
                 sslCertificate: sslCertificate,
-                handler: null // or a custom handler if you need one
+                handler: handler // or a custom handler if you need one
             ));
 
         return services;
